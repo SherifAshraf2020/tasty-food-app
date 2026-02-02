@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ public class SplashFragment extends Fragment implements SplashView{
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     presenter.checkDestination();
+                    ((MainActivity) requireActivity()).onAppReady();
                 }
                 @Override public void onAnimationStart(Animator animation) {}
                 @Override public void onAnimationCancel(Animator animation) {}
@@ -51,11 +53,11 @@ public class SplashFragment extends Fragment implements SplashView{
 
     @Override
     public void navigateToHome() {
-
+        //Navigation.findNavController(requireView()).navigate(R.id.action_splashFragment_to_homeFragment);
     }
 
     @Override
     public void navigateToOnBoarding() {
-
+       // Navigation.findNavController(requireView()).navigate(R.id.action_splashFragment_to_onBoardingFragment);
     }
 }
