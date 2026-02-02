@@ -3,20 +3,23 @@ package com.example.tasty_food_app;
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
 
 public class SplashPresenterImp implements SplashPresenter{
-
     private final SplashView view;
-    private final SharedPrefsLocalDataSource sharedPrefsLocalDataSource;
+    private final SharedPrefsLocalDataSource dataSource;
 
-    public SplashPresenterImp(SplashView view, SharedPrefsLocalDataSource sharedPrefsLocalDataSource) {
+    public SplashPresenterImp(SplashView view, SharedPrefsLocalDataSource dataSource) {
         this.view = view;
-        this.sharedPrefsLocalDataSource = sharedPrefsLocalDataSource;
+        this.dataSource = dataSource;
     }
 
+    @Override
+    public void onAnimationStarted() {
+        view.setAppReady();
+    }
 
     @Override
-    public void checkDestination() {
-        if (sharedPrefsLocalDataSource.isOnBoardingFinished()) {
-            view.navigateToHome();
+    public void onAnimationFinished() {
+        if (dataSource.isOnBoardingFinished()) {
+            view.navigateToAuth();
         } else {
             view.navigateToOnBoarding();
         }
