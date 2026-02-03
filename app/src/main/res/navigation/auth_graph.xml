@@ -9,11 +9,25 @@
         android:id="@+id/loginFragment"
         android:name="com.example.tasty_food_app.auth.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_forgetPasswordFragment"
+            app:destination="@id/forgetPasswordFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_forgetPasswordFragment2"
+            app:destination="@id/forgetPasswordFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.example.tasty_food_app.auth.SignUpFragment"
-        android:label="SignUpFragment" />
+        android:label="SignUpFragment" >
+        <action
+            android:id="@+id/action_signUpFragment_to_loginFragment2"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/forgetPasswordFragment"
         android:name="com.example.tasty_food_app.auth.ForgetPasswordFragment"
