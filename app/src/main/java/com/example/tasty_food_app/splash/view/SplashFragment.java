@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,11 +65,11 @@ public class SplashFragment extends Fragment implements SplashView{
 
     @Override
     public void navigateToAuth() {
-       // NavHostFragment.findNavController(this).navigate(R.id.action_splashFragment_to_authFragment);
+       //NavHostFragment.findNavController(this).navigate(R.id.action_splashFragment_to_authFragment);
     }
 
     @Override
     public void navigateToOnBoarding() {
-        //NavHostFragment.findNavController(this).navigate(R.id.action_splashFragment_to_viewPagerFragment);
+        NavHostFragment.findNavController(this).navigate(R.id.action_splashFragment_to_viewPagerFragment);
     }
 }
