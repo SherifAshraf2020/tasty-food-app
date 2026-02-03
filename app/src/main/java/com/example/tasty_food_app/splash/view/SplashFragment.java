@@ -65,7 +65,7 @@ public class SplashFragment extends Fragment implements SplashView{
 
     @Override
     public void navigateToAuth() {
-       //NavHostFragment.findNavController(this).navigate(R.id.action_splashFragment_to_authFragment);
+       NavHostFragment.findNavController(this).navigate(R.id.action_splashFragment_to_auth_graph);
     }
 
     @Override
