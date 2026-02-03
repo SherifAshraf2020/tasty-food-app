@@ -3,6 +3,9 @@ package com.example.tasty_food_app.onboarding;
 import androidx.fragment.app.Fragment;
 
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.onboarding.Screens.FirstScreen;
+import com.example.tasty_food_app.onboarding.Screens.SecondScreen;
+import com.example.tasty_food_app.onboarding.Screens.ThirdScreen;
 
 import java.util.ArrayList;
 
@@ -11,7 +14,7 @@ public class OnBoardingPresenterImp implements OnBoardingPresenter{
     private final OnBoardingView view;
     private final SharedPrefsLocalDataSource sharedPrefsLocalDataSource;
 
-    public OnBoardingPresenterImpl(OnBoardingView view, SharedPrefsLocalDataSource sharedPrefsLocalDataSource) {
+    public OnBoardingPresenterImp(OnBoardingView view, SharedPrefsLocalDataSource sharedPrefsLocalDataSource) {
         this.view = view;
         this.sharedPrefsLocalDataSource = sharedPrefsLocalDataSource;
     }
