@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg"
-    tools:context=".auth.SignUpActivity">
+    tools:context=".auth.SignUpFragment">
 
     <ImageView
         android:id="@+id/ivSinUpLogo"
@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_widthPercent="0.8" />
+        app:layout_constraintWidth_percent="0.8" />
 
     <TextView
         android:id="@+id/tvSinUp"

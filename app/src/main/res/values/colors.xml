@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary_orange">#FF6A00</color>
+    <color name="background">#FF6A00</color>
     <color name="primary_orange_dark">#E65C00</color>
 
     <color name="onboarding_gradient_start">#FFA54F</color>

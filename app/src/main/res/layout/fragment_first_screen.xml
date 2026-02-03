@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_widthPercent="0.8" />
+        app:layout_constraintWidth_percent="0.8" />
 
     <TextView
         android:id="@+id/title"
@@ -61,7 +61,7 @@
         android:focusable="true"
         android:padding="8dp"
         android:text="Next >"
-        android:textColor="@color/button_light_orange"
+        android:textColor="@color/text_white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
