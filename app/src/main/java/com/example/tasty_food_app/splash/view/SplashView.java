@@ -1,4 +1,4 @@
-package com.example.tasty_food_app;
+package com.example.tasty_food_app.splash.view;
 
 //what Presenter need form UI
 public interface SplashView {

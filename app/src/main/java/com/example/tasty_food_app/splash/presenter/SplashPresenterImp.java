@@ -1,6 +1,7 @@
-package com.example.tasty_food_app;
+package com.example.tasty_food_app.splash.presenter;
 
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.splash.view.SplashView;
 
 public class SplashPresenterImp implements SplashPresenter{
     private final SplashView view;

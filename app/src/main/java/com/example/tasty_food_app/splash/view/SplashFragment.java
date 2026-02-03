@@ -1,19 +1,21 @@
-package com.example.tasty_food_app;
+package com.example.tasty_food_app.splash.view;
 
 import android.animation.Animator;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.tasty_food_app.MainActivity;
+import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.splash.presenter.SplashPresenter;
+import com.example.tasty_food_app.splash.presenter.SplashPresenterImp;
 
 import org.jspecify.annotations.NonNull;
 
