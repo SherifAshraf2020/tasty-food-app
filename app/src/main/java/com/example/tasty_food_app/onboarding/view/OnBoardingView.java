@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.onboarding;
+package com.example.tasty_food_app.onboarding.view;
 
 import androidx.fragment.app.Fragment;
 

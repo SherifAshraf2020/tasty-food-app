@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/viewPagerFragment"
-        android:name="com.example.tasty_food_app.onboarding.ViewPagerFragment"
+        android:name="com.example.tasty_food_app.onboarding.view.ViewPagerFragment"
         android:label="fragment_view_pager"
         tools:layout="@layout/fragment_view_pager" />
 </navigation>

@@ -3,14 +3,13 @@ package com.example.tasty_food_app.onboarding.Screens;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tasty_food_app.R;
-import com.example.tasty_food_app.onboarding.ViewPagerFragment;
+import com.example.tasty_food_app.onboarding.view.ViewPagerFragment;
 
 
 public class FirstScreen extends Fragment {

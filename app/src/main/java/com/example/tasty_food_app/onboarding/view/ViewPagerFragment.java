@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.onboarding;
+package com.example.tasty_food_app.onboarding.view;
 
 import android.os.Bundle;
 
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.onboarding.presenter.OnBoardingPresenterImp;
 
 import java.util.ArrayList;
 

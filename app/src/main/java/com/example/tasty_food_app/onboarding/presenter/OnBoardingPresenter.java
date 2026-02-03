@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.onboarding;
+package com.example.tasty_food_app.onboarding.presenter;
 
 public interface OnBoardingPresenter {
     void loadOnBoardingData();
