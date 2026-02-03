@@ -6,4 +6,8 @@
     <color name="app_bg">#FFFFFF</color>
 
     <color name="background">#FF6A00</color>
+
+    <!-- Onboarding Gradient -->
+    <color name="onboarding_gradient_start">#FFA54F</color>
+    <color name="onboarding_gradient_end">#FF6A00</color>
 </resources>

@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">tasty-food-app</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="discover">DISCOVER</string>
+    <string name="plan">PLAN</string>
+    <string name="cook">COOK</string>
+
+    <string name="discover_desc">Explore a world of delicious meals and exciting flavors. Find your favorites, try something new, and enjoy every bite!</string>
+    <string name="plan_desc">Plan your meals for the week, stay organized, and make mealtime simple and stress-free!</string>
+    <string name="cook_desc">Follow easy recipes and bring your weekly plans to life with delicious homemade meals</string>
+
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
