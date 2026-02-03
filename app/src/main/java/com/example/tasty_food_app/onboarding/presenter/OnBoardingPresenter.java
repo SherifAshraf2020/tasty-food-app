@@ -4,6 +4,6 @@ public interface OnBoardingPresenter {
     void loadOnBoardingData();
     void markOnBoardingFinished();
     void onNextClicked(int currentPos);
-    void onFinishClicked();
+    void onGetStartedClicked();
 
 }

@@ -24,7 +24,7 @@ public class ThirdScreen extends Fragment {
 
         finishButton.setOnClickListener(v -> {
             if (getParentFragment() instanceof ViewPagerFragment) {
-                ((ViewPagerFragment) getParentFragment()).getPresenter().onFinishClicked();
+                ((ViewPagerFragment) getParentFragment()).getPresenter().onGetStartedClicked();
             }
         });
 

@@ -42,7 +42,7 @@ public class OnBoardingPresenterImp implements OnBoardingPresenter{
     }
 
     @Override
-    public void onFinishClicked() {
+    public void onGetStartedClicked() {
         sharedPrefsLocalDataSource.setOnBoardingFinished(true);
         view.navigateToAuth();
     }
