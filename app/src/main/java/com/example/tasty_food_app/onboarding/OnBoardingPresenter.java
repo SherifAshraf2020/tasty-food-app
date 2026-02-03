@@ -1,4 +1,6 @@
 package com.example.tasty_food_app.onboarding;
 
 public interface OnBoardingPresenter {
+    void loadOnBoardingData();
+    void markOnBoardingFinished();
 }
