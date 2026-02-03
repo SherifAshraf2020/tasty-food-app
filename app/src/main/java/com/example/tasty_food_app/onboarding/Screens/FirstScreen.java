@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tasty_food_app.R;
+import com.example.tasty_food_app.onboarding.ViewPagerFragment;
 
 
 public class FirstScreen extends Fragment {
@@ -21,11 +22,12 @@ public class FirstScreen extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_first_screen, container, false);
 
-        ViewPager2 viewPager = getActivity().findViewById(R.id.viewPager);
         View nextButton = view.findViewById(R.id.next);
 
         nextButton.setOnClickListener(v -> {
-            viewPager.setCurrentItem(1);
+            if (getParentFragment() instanceof ViewPagerFragment) {
+                ((ViewPagerFragment) getParentFragment()).getPresenter().onNextClicked(0);
+            }
         });
 
         return view;

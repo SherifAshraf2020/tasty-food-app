@@ -15,7 +15,7 @@ public class SharedPrefsLocalDataSource {
 
     public void setOnBoardingFinished(boolean isFinished){
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("onboarding_finished", isFinished);
+        editor.putBoolean(KEY_ONBOARDING, isFinished);
         editor.apply();
     }
 

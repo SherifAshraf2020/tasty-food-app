@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tasty_food_app.R;
+import com.example.tasty_food_app.onboarding.ViewPagerFragment;
 
 
 public class ThirdScreen extends Fragment {
@@ -20,13 +21,13 @@ public class ThirdScreen extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_third_screen, container, false);
-
         View finishButton = view.findViewById(R.id.finish);
 
-//        finishButton.setOnClickListener(v -> {
-//            Navigation.findNavController(view).navigate(R.id.action_viewPagerFragment_to_homeFragment);
-//            onBoardingFinished();
-//        });
+        finishButton.setOnClickListener(v -> {
+            if (getParentFragment() instanceof ViewPagerFragment) {
+                ((ViewPagerFragment) getParentFragment()).getPresenter().onFinishClicked();
+            }
+        });
 
         return view;
     }
