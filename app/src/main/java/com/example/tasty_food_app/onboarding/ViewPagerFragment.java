@@ -18,11 +18,11 @@ import java.util.ArrayList;
 public class ViewPagerFragment extends Fragment implements OnBoardingView{
 
     private ViewPager2 viewPager;
+    OnBoardingPresenterImp onBoardingPresenterImp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        OnBoardingPresenterImp onBoardingPresenterImp;
 
         View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
         viewPager = view.findViewById(R.id.viewPager);
@@ -49,5 +49,16 @@ public class ViewPagerFragment extends Fragment implements OnBoardingView{
     @Override
     public void navigateToAuth() {
         // Navigation.findNavController(requireView()).navigate(R.id.action_to_login);
+    }
+
+    @Override
+    public void scrollToPage(int pageIndex) {
+        if (viewPager != null) {
+            viewPager.setCurrentItem(pageIndex, true);
+        }
+    }
+
+    public OnBoardingPresenterImp getPresenter() {
+        return onBoardingPresenterImp;
     }
 }

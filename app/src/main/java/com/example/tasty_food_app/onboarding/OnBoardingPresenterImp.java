@@ -33,4 +33,16 @@ public class OnBoardingPresenterImp implements OnBoardingPresenter{
         sharedPrefsLocalDataSource.setOnBoardingFinished(true);
         view.navigateToAuth();
     }
+
+    @Override
+    public void onNextClicked(int currentPos) {
+        int nextPage = currentPos + 1;
+        view.scrollToPage(nextPage);
+    }
+
+    @Override
+    public void onFinishClicked() {
+        sharedPrefsLocalDataSource.setOnBoardingFinished(true);
+        view.navigateToAuth();
+    }
 }
