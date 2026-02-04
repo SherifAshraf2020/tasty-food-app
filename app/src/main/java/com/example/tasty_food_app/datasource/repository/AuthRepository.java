@@ -21,4 +21,8 @@ public class AuthRepository {
     public void signUpWithEmail(String email, String password, AuthNetworkResponse callback) {
         authRemoteDataSource.signUpWithEmail(email, password, callback);
     }
+
+    public void LogInWithEmail(String email, String password, AuthNetworkResponse callback) {
+        authRemoteDataSource.LogInWithEmail(email, password, callback);
+    }
 }

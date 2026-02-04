@@ -22,4 +22,17 @@ public class EmailAuthService {
                     }
                 });
     }
+
+    public void signIn(String email, String password, AuthNetworkResponse callback) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess();
+                    } else {
+                        String error = task.getException() != null ?
+                                task.getException().getMessage() : "Login Failed";
+                        callback.onFailure(error);
+                    }
+                });
+    }
 }
