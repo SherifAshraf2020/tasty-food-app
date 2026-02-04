@@ -9,6 +9,11 @@
     <string name="plan_desc">Plan your meals for the week, stay organized, and make mealtime simple and stress-free!</string>
     <string name="cook_desc">Follow easy recipes and bring your weekly plans to life with delicious homemade meals</string>
 
+    <string name="forgot_password_msg">Confirm the email address below to receive a password reset link.</string>
+    <string name="on_submit_msg">Check out your mailbox, you will receive an email containing link where you can reset your password</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="default_web_client_id">774712563915-8c9ai65fc7nnvvfc9ajf4rgo48l8makf.apps.googleusercontent.com</string>
 </resources>

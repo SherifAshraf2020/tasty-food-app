@@ -1,8 +1,9 @@
-package com.example.tasty_food_app.onboarding;
+package com.example.tasty_food_app.onboarding.view;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.onboarding.presenter.OnBoardingPresenterImp;
 
 import java.util.ArrayList;
 
@@ -48,7 +50,7 @@ public class ViewPagerFragment extends Fragment implements OnBoardingView{
 
     @Override
     public void navigateToAuth() {
-        // Navigation.findNavController(requireView()).navigate(R.id.action_to_login);
+         Navigation.findNavController(requireView()).navigate(R.id.action_viewPagerFragment_to_auth_graph);
     }
 
     @Override

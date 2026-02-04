@@ -1,8 +1,9 @@
-package com.example.tasty_food_app.onboarding;
+package com.example.tasty_food_app.onboarding.presenter;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.onboarding.view.OnBoardingView;
 import com.example.tasty_food_app.onboarding.Screens.FirstScreen;
 import com.example.tasty_food_app.onboarding.Screens.SecondScreen;
 import com.example.tasty_food_app.onboarding.Screens.ThirdScreen;
@@ -41,7 +42,7 @@ public class OnBoardingPresenterImp implements OnBoardingPresenter{
     }
 
     @Override
-    public void onFinishClicked() {
+    public void onGetStartedClicked() {
         sharedPrefsLocalDataSource.setOnBoardingFinished(true);
         view.navigateToAuth();
     }
