@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.auth.log_in;
+package com.example.tasty_food_app.auth.log_in.view;
 
 public interface LoginView {
     void showLoading();

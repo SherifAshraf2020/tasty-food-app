@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.auth;
+package com.example.tasty_food_app.auth.forget_pass.view;
 
 public interface ForgetPasswordView {
     void onEmailSentSuccess();

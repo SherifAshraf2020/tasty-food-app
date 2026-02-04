@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.auth.log_in;
+package com.example.tasty_food_app.auth.log_in.view;
 
 import android.os.Bundle;
 
@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
+import com.example.tasty_food_app.auth.log_in.presenter.LoginPresenter;
+import com.example.tasty_food_app.auth.log_in.presenter.LoginPresenterImp;
 import com.example.tasty_food_app.datasource.remote.AuthRemoteDataSource;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.google.android.material.textfield.TextInputEditText;

@@ -1,9 +1,10 @@
-package com.example.tasty_food_app.auth;
+package com.example.tasty_food_app.auth.forget_pass.presenter;
 
+import com.example.tasty_food_app.auth.forget_pass.view.ForgetPasswordView;
 import com.example.tasty_food_app.datasource.remote.AuthNetworkResponse;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
 
-public class ForgetPasswordPresenterImp implements ForgetPasswordPresenter{
+public class ForgetPasswordPresenterImp implements ForgetPasswordPresenter {
     private ForgetPasswordView forgetPasswordView;
     private AuthRepository authRepository;
 

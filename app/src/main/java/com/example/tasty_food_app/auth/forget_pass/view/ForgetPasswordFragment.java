@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.auth;
+package com.example.tasty_food_app.auth.forget_pass.view;
 
 import android.os.Bundle;
 
@@ -10,19 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
+import com.example.tasty_food_app.auth.forget_pass.presenter.ForgetPasswordPresenter;
+import com.example.tasty_food_app.auth.forget_pass.presenter.ForgetPasswordPresenterImp;
 import com.example.tasty_food_app.datasource.remote.AuthRemoteDataSource;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
 
 
-public class ForgetPasswordFragment extends Fragment implements ForgetPasswordView{
+public class ForgetPasswordFragment extends Fragment implements ForgetPasswordView {
     private TextInputEditText etEmail;
     private TextView tvSubmitMsg;
     private ProgressBar progressBar;
