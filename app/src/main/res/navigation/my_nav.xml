@@ -32,4 +32,11 @@
             app:popUpToInclusive="true" />
     </fragment>
     <include app:graph="@navigation/auth_graph" />
+    <include app:graph="@navigation/home_nav_graph" />
+
+    <action
+        android:id="@+id/action_auth_graph_to_home_nav_graph"
+        app:destination="@id/home_nav_graph"
+        app:popUpTo="@id/auth_graph"
+        app:popUpToInclusive="true" />
 </navigation>
