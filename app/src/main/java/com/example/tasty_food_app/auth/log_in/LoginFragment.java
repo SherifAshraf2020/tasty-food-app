@@ -25,7 +25,7 @@ public class LoginFragment extends Fragment implements LoginView{
     private LoginPresenter presenter;
     private TextInputEditText etEmail, etPassword;
     private Button btnSignIn;
-    private TextView tvRegister;
+    private TextView tvRegister,tvForgetPassword;
     private ProgressBar progressBar;
 
     @Override
@@ -41,6 +41,7 @@ public class LoginFragment extends Fragment implements LoginView{
         etPassword = view.findViewById(R.id.etSinInPassword);
         btnSignIn = view.findViewById(R.id.btnSignIn);
         tvRegister = view.findViewById(R.id.tvRegister);
+        tvForgetPassword = view.findViewById(R.id.tvForgotPassword);
 
         progressBar = new ProgressBar(getContext());
 
@@ -55,6 +56,19 @@ public class LoginFragment extends Fragment implements LoginView{
                 Toast.makeText(getContext(), "Please enter email and password", Toast.LENGTH_SHORT).show();
             } else {
                 presenter.signIn(email, password);
+            }
+        });
+
+        tvForgetPassword.setOnClickListener(v -> {
+            String email = etEmail.getText().toString().trim();
+
+            if (email.isEmpty()) {
+                etEmail.setError("Email is required");
+                Toast.makeText(getContext(), "Please enter your email", Toast.LENGTH_SHORT).show();
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("userEmail", email);
+                Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_forgetPasswordFragment, bundle);
             }
         });
 
