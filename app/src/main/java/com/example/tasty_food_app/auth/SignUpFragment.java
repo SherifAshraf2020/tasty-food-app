@@ -10,16 +10,29 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
-import com.google.android.material.textfield.TextInputEditText;
+
+import com.example.tasty_food_app.datasource.remote.AuthRemoteDataSource;
+import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-public class SignUpFragment extends Fragment {
+public class SignUpFragment extends Fragment implements SignUpView{
 
-    private TextInputEditText etName, etEmail, etPassword;
+    //private TextInputEditText etName, etEmail, etPassword;
     private FirebaseAuth mAuth;
+
+    private SignUpPresenter presenter;
+    private EditText etName, etEmail, etPassword;
+    private Button btnSignUp;
+    private ProgressBar progressBar;
+    private TextView tvLoginPage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,54 +40,71 @@ public class SignUpFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
 
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_sign_up, container, false);
+        return inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        etName = view.findViewById(R.id.etSinUpName);
-        etEmail = view.findViewById(R.id.etSinUpEmail);
-        etPassword = view.findViewById(R.id.etSinUpPassword);
-
-        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.tvLoginPage).setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.action_signUpFragment_to_loginFragment2));
+        etName = view.findViewById(R.id.etSinUpName);
+        etEmail = view.findViewById(R.id.etSinUpEmail);
+        etPassword = view.findViewById(R.id.etSinUpPassword);
+        btnSignUp = view.findViewById(R.id.btnSignUp);
+        progressBar = view.findViewById(R.id.progressBar);
+        tvLoginPage = view.findViewById(R.id.tvLoginPage);
 
-        view.findViewById(R.id.btnSignUp).setOnClickListener(v -> {
+
+        presenter = new SignUpPresenterImp(this,
+                AuthRepository.getInstance(new AuthRemoteDataSource()));
+
+        btnSignUp.setOnClickListener(v -> {
             String name = etName.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
+            String pass = etPassword.getText().toString().trim();
 
-            if (validateData(name, email, password)) {
-                performSignUp(email, password, v);
+            if (validateInputs(name, email, pass)) {
+                presenter.signUp(name, email, pass);
             }
         });
-    }
-        private boolean validateData(String name, String email, String password) {
-            if (name.isEmpty()) {
-                etName.setError("Required");
-                return false;
-            }
-            if (email.isEmpty()) {
-                etEmail.setError("Required");
-                return false;
-            }
-            if (password.length() < 6) {
-                etPassword.setError("Min 6 characters");
-                return false;
-            }
-            return true;
-        }
 
-    private void performSignUp(String email, String password, View v) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Navigation.findNavController(v).navigate(R.id.action_signUpFragment_to_loginFragment2);
-                    }
-                });
+    }
+    private boolean validateInputs(String name, String email, String pass) {
+        if (name.isEmpty() || email.isEmpty() || pass.isEmpty()) {
+            Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (pass.length() < 6) {
+            Toast.makeText(getContext(), "Password must be > 6 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public void showLoading() {
+        progressBar.setVisibility(View.VISIBLE);
+        btnSignUp.setEnabled(false);
+        btnSignUp.setAlpha(0.5f);
+    }
+
+    @Override
+    public void hideLoading() {
+        progressBar.setVisibility(View.GONE);
+        btnSignUp.setEnabled(true);
+        btnSignUp.setAlpha(1.0f);
+    }
+
+    @Override
+    public void onSignUpSuccess() {
+        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+        // Navigation.findNavController(requireView()).navigate(R.id.action_signUpFragment_to_homeFragment);
+    }
+
+    @Override
+    public void onSignUpError(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
     }
 }
