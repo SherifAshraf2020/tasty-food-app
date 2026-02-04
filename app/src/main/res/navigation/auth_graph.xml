@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.tasty_food_app.auth.LoginFragment"
+        android:name="com.example.tasty_food_app.auth.log_in.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.tasty_food_app.auth.SignUpFragment"
+        android:name="com.example.tasty_food_app.auth.sign_up.view.SignUpFragment"
         android:label="SignUpFragment" >
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment2"
