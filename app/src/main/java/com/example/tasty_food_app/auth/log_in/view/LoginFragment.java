@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -14,6 +15,21 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
+
+import androidx.credentials.Credential;
+import androidx.credentials.CredentialManager;
+import androidx.credentials.CredentialManagerCallback;
+import androidx.credentials.CustomCredential;
+import androidx.credentials.GetCredentialRequest;
+import androidx.credentials.GetCredentialResponse;
+import androidx.credentials.exceptions.GetCredentialException;
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
+
+
+import android.util.Log;
 
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.auth.log_in.presenter.LoginPresenter;
@@ -27,6 +43,7 @@ public class LoginFragment extends Fragment implements LoginView{
     private LoginPresenter presenter;
     private TextInputEditText etEmail, etPassword;
     private Button btnSignIn;
+    private CardView btnGoogle;
     private TextView tvRegister,tvForgetPassword;
     private ProgressBar progressBar;
 
@@ -44,8 +61,8 @@ public class LoginFragment extends Fragment implements LoginView{
         btnSignIn = view.findViewById(R.id.btnSignIn);
         tvRegister = view.findViewById(R.id.tvRegister);
         tvForgetPassword = view.findViewById(R.id.tvForgotPassword);
-
-        progressBar = new ProgressBar(getContext());
+        btnGoogle = view.findViewById(R.id.btnSignInWithGoogle);
+        progressBar = view.findViewById(R.id.progressBar);
 
         presenter = new LoginPresenterImp(this,
                 AuthRepository.getInstance(new AuthRemoteDataSource()));
@@ -60,6 +77,10 @@ public class LoginFragment extends Fragment implements LoginView{
                 presenter.signIn(email, password);
             }
         });
+
+
+        setupGoogleLogin();
+
 
         tvForgetPassword.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
@@ -77,6 +98,61 @@ public class LoginFragment extends Fragment implements LoginView{
         tvRegister.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_signUpFragment);
         });
+    }
+
+
+
+    private void setupGoogleLogin() {
+        CredentialManager credentialManager = CredentialManager.create(requireContext());
+
+        btnGoogle.setOnClickListener(v -> {
+            GetGoogleIdOption googleIdOption = new GetGoogleIdOption.Builder()
+                    .setFilterByAuthorizedAccounts(false)
+                    .setServerClientId(getString(R.string.default_web_client_id))
+                    .setAutoSelectEnabled(true)
+                    .build();
+
+            GetCredentialRequest request = new GetCredentialRequest.Builder()
+                    .addCredentialOption(googleIdOption)
+                    .build();
+
+            credentialManager.getCredentialAsync(
+                    requireActivity(),
+                    request,
+                    null,
+                    Runnable::run,
+                    new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                        @Override
+                        public void onResult(GetCredentialResponse result) {
+                            handleGoogleSignIn(result);
+                        }
+
+                        @Override
+                        public void onError(GetCredentialException e) {
+                            Log.e("GoogleAuth", "Error: " + e.getMessage());
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(() -> onLoginError("Google Sign-in failed"));
+                            }
+                        }
+                    }
+            );
+        });
+    }
+
+    private void handleGoogleSignIn(GetCredentialResponse result) {
+        Credential credential = result.getCredential();
+        if (credential instanceof CustomCredential &&
+                credential.getType().equals(GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL)) {
+            try {
+                GoogleIdTokenCredential googleIdToken = GoogleIdTokenCredential.createFrom(credential.getData());
+                String idToken = googleIdToken.getIdToken();
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> presenter.signInWithGoogle(idToken));
+                }
+            } catch (Exception e) {
+                Log.e("GoogleAuth", "Parsing Error", e);
+            }
+        }
     }
 
 

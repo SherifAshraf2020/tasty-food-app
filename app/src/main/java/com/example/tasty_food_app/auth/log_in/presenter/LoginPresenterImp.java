@@ -32,4 +32,26 @@ public class LoginPresenterImp implements LoginPresenter{
             }
         });
     }
+
+    @Override
+    public void signInWithGoogle(String idToken) {
+        if (loginView != null) loginView.showLoading();
+        authRepository.LogInWithGoogle(idToken, new AuthNetworkResponse() {
+            @Override
+            public void onSuccess() {
+                if (loginView != null) {
+                    loginView.hideLoading();
+                    loginView.onLoginSuccess();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                if (loginView != null) {
+                    loginView.hideLoading();
+                    loginView.onLoginError(error);
+                }
+            }
+        });
+    }
 }

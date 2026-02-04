@@ -29,4 +29,8 @@ public class AuthRepository {
     public void ResetPassword(String email, AuthNetworkResponse callback) {
         authRemoteDataSource.resetPassword(email, callback);
     }
+
+    public void LogInWithGoogle(String idToken, AuthNetworkResponse callback) {
+        authRemoteDataSource.logInWithGoogle(idToken, callback);
+    }
 }
