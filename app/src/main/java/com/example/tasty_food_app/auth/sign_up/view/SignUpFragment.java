@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.auth;
+package com.example.tasty_food_app.auth.sign_up.view;
 
 import android.os.Bundle;
 
@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
 
+import com.example.tasty_food_app.auth.sign_up.presenter.SignUpPresenter;
+import com.example.tasty_food_app.auth.sign_up.presenter.SignUpPresenterImp;
 import com.example.tasty_food_app.datasource.remote.AuthRemoteDataSource;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.google.firebase.auth.FirebaseAuth;
@@ -100,7 +102,7 @@ public class SignUpFragment extends Fragment implements SignUpView{
     @Override
     public void onSignUpSuccess() {
         Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-        // Navigation.findNavController(requireView()).navigate(R.id.action_signUpFragment_to_homeFragment);
+         Navigation.findNavController(requireView()).navigate(R.id.action_auth_graph_to_home_nav_graph);
     }
 
     @Override

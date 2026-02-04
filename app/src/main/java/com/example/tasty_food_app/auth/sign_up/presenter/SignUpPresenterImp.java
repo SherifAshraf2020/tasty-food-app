@@ -1,5 +1,6 @@
-package com.example.tasty_food_app.auth;
+package com.example.tasty_food_app.auth.sign_up.presenter;
 
+import com.example.tasty_food_app.auth.sign_up.view.SignUpView;
 import com.example.tasty_food_app.datasource.remote.AuthNetworkResponse;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
 
