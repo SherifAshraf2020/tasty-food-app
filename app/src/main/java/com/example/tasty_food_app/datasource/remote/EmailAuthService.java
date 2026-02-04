@@ -40,7 +40,7 @@ public class EmailAuthService {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        callback.onSuccess(); // هنا معناه الإيميل اتبعت بنجاح
+                        callback.onSuccess();
                     } else {
                         String error = task.getException() != null ?
                                 task.getException().getMessage() : "Error sending reset email";
