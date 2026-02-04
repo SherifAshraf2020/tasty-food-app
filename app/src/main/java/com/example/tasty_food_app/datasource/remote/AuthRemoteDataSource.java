@@ -10,8 +10,11 @@ public class AuthRemoteDataSource {
     public void signUpWithEmail(String email, String password, AuthNetworkResponse callback) {
         emailAuthService.signUp(email, password, callback);
     }
-    public void LogInWithEmail(String email, String password, AuthNetworkResponse callback) {
+    public void logInWithEmail(String email, String password, AuthNetworkResponse callback) {
         emailAuthService.signIn(email, password, callback);
     }
 
+    public void resetPassword(String email, AuthNetworkResponse callback) {
+        emailAuthService.resetPassword(email, callback);
+    }
 }

@@ -35,4 +35,17 @@ public class EmailAuthService {
                     }
                 });
     }
+
+    public void resetPassword(String email, AuthNetworkResponse callback) {
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess(); // هنا معناه الإيميل اتبعت بنجاح
+                    } else {
+                        String error = task.getException() != null ?
+                                task.getException().getMessage() : "Error sending reset email";
+                        callback.onFailure(error);
+                    }
+                });
+    }
 }
