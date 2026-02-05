@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:title="Reciepes"
+        android:icon="@drawable/ic_restaurant"/>
+    <item
+        android:id="@id/mealPlanFragment"
+        android:title="Weakly Plan"
+        android:icon="@drawable/ic_weekly_plan"/>
+    <item
+        android:id="@id/settingsFragment"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings"/>
+</menu>
