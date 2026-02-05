@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.tasty_food_app.HomeFragment"
+        android:name="com.example.tasty_food_app.home.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/mealPlanFragment"
-        android:name="com.example.tasty_food_app.MealPlanFragment"
+        android:name="com.example.tasty_food_app.home.mealplan.MealPlanFragment"
         android:label="fragment_meal_plan"
         tools:layout="@layout/fragment_meal_plan" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.tasty_food_app.SettingsFragment"
+        android:name="com.example.tasty_food_app.home.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>
