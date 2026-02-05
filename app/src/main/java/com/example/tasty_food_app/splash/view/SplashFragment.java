@@ -15,6 +15,8 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.tasty_food_app.MainActivity;
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.remote.AuthRemoteDataSource;
+import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.example.tasty_food_app.splash.presenter.SplashPresenter;
 import com.example.tasty_food_app.splash.presenter.SplashPresenterImp;
 
@@ -34,8 +36,11 @@ public class SplashFragment extends Fragment implements SplashView{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPrefsLocalDataSource dataSource = new SharedPrefsLocalDataSource(requireContext());
-        presenter = new SplashPresenterImp(this, dataSource);
+        AuthRepository authRepository = AuthRepository.getInstance(
+                new AuthRemoteDataSource(),
+                new SharedPrefsLocalDataSource(requireContext())
+        );
+        presenter = new SplashPresenterImp(this, authRepository);
 
         LottieAnimationView lottie = view.findViewById(R.id.lottie);
         lottie.playAnimation();
@@ -71,5 +76,10 @@ public class SplashFragment extends Fragment implements SplashView{
     @Override
     public void navigateToOnBoarding() {
         NavHostFragment.findNavController(this).navigate(R.id.action_splashFragment_to_viewPagerFragment);
+    }
+
+    @Override
+    public void navigateToHome() {
+        NavHostFragment.findNavController(this).navigate(R.id.action_splashFragment_to_home_nav_graph);
     }
 }

@@ -25,6 +25,8 @@ import androidx.credentials.CustomCredential;
 import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.GetCredentialException;
+
+import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 
@@ -65,8 +67,10 @@ public class LoginFragment extends Fragment implements LoginView{
         progressBar = view.findViewById(R.id.progressBar);
 
         presenter = new LoginPresenterImp(this,
-                AuthRepository.getInstance(new AuthRemoteDataSource()));
-
+                AuthRepository.getInstance(
+                        new AuthRemoteDataSource(),
+                        new SharedPrefsLocalDataSource(requireContext())
+                ));
         btnSignIn.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();

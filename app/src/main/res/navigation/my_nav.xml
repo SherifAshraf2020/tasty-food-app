@@ -19,6 +19,9 @@
             app:destination="@id/auth_graph"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_home_nav_graph"
+            app:destination="@id/home_nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/viewPagerFragment"

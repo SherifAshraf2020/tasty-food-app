@@ -17,6 +17,7 @@ public class LoginPresenterImp implements LoginPresenter{
         authRepository.LogInWithEmail(email, password, new AuthNetworkResponse() {
             @Override
             public void onSuccess() {
+                authRepository.saveUserSession(email);
                 if (loginView != null) {
                     loginView.hideLoading();
                     loginView.onLoginSuccess();

@@ -5,4 +5,5 @@ public interface SplashView {
     void setAppReady();
     void navigateToAuth();
     void navigateToOnBoarding();
+    void navigateToHome();
 }

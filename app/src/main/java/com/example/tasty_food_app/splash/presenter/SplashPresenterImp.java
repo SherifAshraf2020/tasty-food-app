@@ -1,15 +1,15 @@
 package com.example.tasty_food_app.splash.presenter;
 
-import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.example.tasty_food_app.splash.view.SplashView;
 
 public class SplashPresenterImp implements SplashPresenter{
     private final SplashView view;
-    private final SharedPrefsLocalDataSource dataSource;
+    private final AuthRepository authRepository;
 
-    public SplashPresenterImp(SplashView view, SharedPrefsLocalDataSource dataSource) {
+    public SplashPresenterImp(SplashView view, AuthRepository repository) {
         this.view = view;
-        this.dataSource = dataSource;
+        this.authRepository = repository;
     }
 
     @Override
@@ -19,10 +19,13 @@ public class SplashPresenterImp implements SplashPresenter{
 
     @Override
     public void onAnimationFinished() {
-        if (dataSource.isOnBoardingFinished()) {
-            view.navigateToAuth();
-        } else {
+
+        if (!authRepository.isOnBoardingFinished()) {
             view.navigateToOnBoarding();
+        } else if (authRepository.isUserLoggedIn()) {
+            view.navigateToHome();
+        } else {
+            view.navigateToAuth();
         }
     }
 }

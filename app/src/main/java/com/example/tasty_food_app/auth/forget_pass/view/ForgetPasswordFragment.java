@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.auth.forget_pass.presenter.ForgetPasswordPresenter;
 import com.example.tasty_food_app.auth.forget_pass.presenter.ForgetPasswordPresenterImp;
+import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.remote.AuthRemoteDataSource;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.google.android.material.textfield.TextInputEditText;
@@ -52,7 +53,11 @@ public class ForgetPasswordFragment extends Fragment implements ForgetPasswordVi
             etEmail.setText(emailFromLogin);
         }
 
-        presenter = new ForgetPasswordPresenterImp(this, AuthRepository.getInstance(new AuthRemoteDataSource()));
+        presenter = new ForgetPasswordPresenterImp(this,
+                AuthRepository.getInstance(
+                        new AuthRemoteDataSource(),
+                        new SharedPrefsLocalDataSource(requireContext())
+                ));
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
