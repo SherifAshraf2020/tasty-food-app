@@ -19,6 +19,7 @@ import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.home.favorite.presenter.FavoritesPresenter;
 import com.example.tasty_food_app.home.home.favorite.presenter.FavoritesPresenterImp;
+import com.example.tasty_food_app.home.home.favorite.view.FavoritesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

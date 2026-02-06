@@ -88,7 +88,7 @@ public class DiscoverFragment extends Fragment implements DiscoverView, OnMealCl
     public void onMealDetailsClick(Meal meal) {
         Bundle bundle = new Bundle();
         bundle.putString("mealId", meal.getIdMeal());
-        //Navigation.findNavController(requireView()).navigate(R.id.action_discoverFragment_to_mealDetailsFragment, bundle);
+        Navigation.findNavController(requireView()).navigate(R.id.action_discoverFragment_to_mealDetailsFragment, bundle);
     }
 
 
