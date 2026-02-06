@@ -21,4 +21,7 @@ public class MealRemoteDataSource {
         return mealService.getMealsByFirstLetter(letter);
     }
 
+    public Single<MealResponse> getMealDetails(String id) {
+        return mealService.getMealById(id);
+    }
 }

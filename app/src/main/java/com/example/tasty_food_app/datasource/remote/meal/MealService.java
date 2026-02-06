@@ -13,4 +13,7 @@ public interface MealService {
 
     @GET("search.php")
     Single<MealResponse> getMealsByFirstLetter(@Query("f") String letter);
+
+    @GET("lookup.php")
+    Single<MealResponse> getMealById(@Query("i") String id);
 }
