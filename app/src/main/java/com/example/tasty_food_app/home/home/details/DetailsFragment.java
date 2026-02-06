@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.home.home;
+package com.example.tasty_food_app.home.home.details;
 
 import android.os.Bundle;
 
