@@ -56,4 +56,20 @@ dependencies {
     implementation("androidx.credentials:credentials:1.3.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
+    implementation(libs.retrofit)
+    implementation(libs.convertar.gson)
+    implementation(libs.glide)
+    val room_version = "2.8.4"
+
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+
+    //Rx android
+    implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.6")
+
+    implementation("com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0")
+
+    implementation("androidx.room:room-rxjava3:$room_version")
 }
