@@ -67,6 +67,13 @@ public class DiscoverFragment extends Fragment implements DiscoverView, OnMealCl
         );
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.getMealsByLetter("a");
+    }
+
     @Override
     public void addMealToFav(Meal meal) {
         presenter.addToFavorites(meal);

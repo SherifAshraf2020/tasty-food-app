@@ -23,15 +23,17 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
     @Override
     public void getRandomMeal() {
         discoverView.showLoading();
+
         disposable.add(
-                mealRepository.getRandomMeal()
+                mealRepository.getDailyRandomMeal()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                response -> {
+                                meal -> {
                                     discoverView.hideLoading();
-                                    if (response.getMeals() != null && !response.getMeals().isEmpty()) {
-                                        discoverView.showRandomMeal(response.getMeals().get(0));
+
+                                    if (meal != null) {
+                                        discoverView.showRandomMeal(meal);
                                     }
                                 },
                                 throwable -> {
@@ -47,11 +49,21 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
         disposable.add(
                 mealRepository.getMealsByLetter(letter)
                         .subscribeOn(Schedulers.io())
+                        .flattenAsObservable(response -> response.getMeals())
+                        .flatMap(meal ->
+                                mealRepository.isFavorite(meal.getIdMeal())
+                                        .toObservable()
+                                        .map(isFav -> {
+                                            meal.setFavorite(isFav);
+                                            return meal;
+                                        })
+                        )
+                        .toList()
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                response -> {
-                                    if (response.getMeals() != null) {
-                                        discoverView.showMealsByLetter(response.getMeals());
+                                meals -> {
+                                    if (meals != null) {
+                                        discoverView.showMealsByLetter(meals);
                                     }
                                 },
                                 throwable -> discoverView.showError(throwable.getMessage())
