@@ -1,30 +1,44 @@
 package com.example.tasty_food_app.datasource.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "meals_table")
 public class Meal {
-    @SerializedName("id")
     @PrimaryKey
+    @NonNull
+    @SerializedName("idMeal")
     public String idMeal;
 
-    @SerializedName("name")
+    @SerializedName("strMeal")
     public String strMeal;
 
-    @SerializedName("thumb")
+    @SerializedName("strMealThumb")
     public String strMealThumb;
 
-    @SerializedName("category")
+    @SerializedName("strCategory")
     public String strCategory;
-    @SerializedName("country")
+
+    @SerializedName("strArea")
     public String strArea;
 
-    @SerializedName("instructions")
+    @SerializedName("strInstructions") // كانت "instructions" غلط
     public String strInstructions;
 
+
+    @Ignore
+    private boolean isFavorite;
+
+    public void setFavorite(boolean favorite) {
+        this.isFavorite = favorite;
+    }
+    public boolean isFavorite() {
+        return isFavorite;
+    }
 
 
 

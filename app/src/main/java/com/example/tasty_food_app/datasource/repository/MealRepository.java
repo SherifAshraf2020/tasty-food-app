@@ -3,6 +3,7 @@ package com.example.tasty_food_app.datasource.repository;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.local.MealLocalDataSource;
 import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.model.MealResponse;
@@ -17,21 +18,34 @@ import io.reactivex.rxjava3.core.Single;
 public class MealRepository {
     MealRemoteDataSource mealRemoteDataSource;
     MealLocalDataSource mealLocalDataSource;
+    SharedPrefsLocalDataSource sharedPrefsDataSource;
 
 
-public MealRepository(Context context)
-{
-    mealRemoteDataSource = new MealRemoteDataSource();
-    mealLocalDataSource = new MealLocalDataSource(context);
-}
-    public Single<MealResponse> getRandomMeal(){
-        return mealRemoteDataSource.getRandomMeal();
+    public MealRepository(Context context) {
+        Context appContext = context.getApplicationContext();
+        mealRemoteDataSource = new MealRemoteDataSource();
+        mealLocalDataSource = new MealLocalDataSource(context);
+        sharedPrefsDataSource = new SharedPrefsLocalDataSource(context);
     }
 
-    public Single<MealResponse> getMealsByLetter(String letter){
+    public Single<Meal> getDailyRandomMeal() {
+        String todayDate = new java.text.SimpleDateFormat("yyyyMMdd", java.util.Locale.getDefault()).format(new java.util.Date());
+
+        if (sharedPrefsDataSource.getStoredDailyMealDate().equals(todayDate)) {
+            Meal cachedMeal = sharedPrefsDataSource.getStoredDailyMeal();
+            if (cachedMeal != null) {
+                return Single.just(cachedMeal);
+            }
+        }
+
+        return mealRemoteDataSource.getRandomMeal()
+                .map(response -> response.getMeals().get(0))
+                .doOnSuccess(meal -> sharedPrefsDataSource.saveDailyMeal(meal, todayDate));
+    }
+
+    public Single<MealResponse> getMealsByLetter(String letter) {
         return mealRemoteDataSource.getMealsByFirstLetter(letter);
     }
-
 
 
 
@@ -51,5 +65,8 @@ public MealRepository(Context context)
     public Single<Boolean> isFavorite(String id) {
         return mealLocalDataSource.isFavorite(id);
     }
+
+
+
 
 }
