@@ -1,8 +1,8 @@
 package com.example.tasty_food_app.datasource.repository;
 
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
-import com.example.tasty_food_app.datasource.remote.AuthNetworkResponse;
-import com.example.tasty_food_app.datasource.remote.AuthRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.auth.AuthNetworkResponse;
+import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
 
 public class AuthRepository {
     private AuthRemoteDataSource authRemoteDataSource;
