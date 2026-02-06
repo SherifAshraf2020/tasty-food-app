@@ -53,4 +53,21 @@
     <action
         android:id="@+id/action_discoverFragment_to_searchFragment"
         app:destination="@id/searchFragment" />
+
+
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.tasty_food_app.home.home.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" />
+
+    <action
+        android:id="@+id/action_discoverFragment_to_mealDetailsFragment"
+        app:destination="@id/detailsFragment" />
+
+    <action
+        android:id="@+id/action_favoritesFragment_to_mealDetailsFragment"
+        app:destination="@id/detailsFragment" />
+
+
 </navigation>

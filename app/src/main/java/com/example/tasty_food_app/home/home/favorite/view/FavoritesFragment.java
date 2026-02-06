@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -72,6 +73,14 @@ public class FavoritesFragment extends Fragment implements FavoritesView, OnFavo
     @Override
     public void onDeleteClick(Meal meal) {
         presenter.removeMeal(meal);
+    }
+
+    @Override
+    public void onMealDetailsClick(Meal meal) {
+        Bundle bundle = new Bundle();
+        bundle.putString("mealId", meal.getIdMeal());
+        Navigation.findNavController(requireView()).navigate(R.id.action_favoritesFragment_to_mealDetailsFragment, bundle);
+
     }
 
     @Override

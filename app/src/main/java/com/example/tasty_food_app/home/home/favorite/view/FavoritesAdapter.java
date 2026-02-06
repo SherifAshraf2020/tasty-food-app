@@ -57,6 +57,10 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
                 onFavoriteClick.onDeleteClick(currentMeal);
             }
         });
+
+        holder.imgMeal.setOnClickListener(v -> {
+            onFavoriteClick.onMealDetailsClick(currentMeal);
+        });
     }
 
     @Override
