@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.tasty_food_app.home.home.discover.view.DiscoverFragment;
+import com.example.tasty_food_app.home.home.favorite.FavoritesFragment;
 
 public class HomeTabsAdapter extends FragmentStateAdapter {
     public HomeTabsAdapter(@NonNull Fragment fragment) {
