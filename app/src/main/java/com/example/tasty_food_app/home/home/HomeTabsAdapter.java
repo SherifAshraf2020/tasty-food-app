@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.tasty_food_app.home.home.discover.DiscoverFragment;
+import com.example.tasty_food_app.home.home.discover.view.DiscoverFragment;
 
 public class HomeTabsAdapter extends FragmentStateAdapter {
     public HomeTabsAdapter(@NonNull Fragment fragment) {

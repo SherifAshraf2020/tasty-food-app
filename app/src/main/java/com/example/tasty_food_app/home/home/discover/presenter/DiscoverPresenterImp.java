@@ -1,9 +1,10 @@
-package com.example.tasty_food_app.home.home.discover;
+package com.example.tasty_food_app.home.home.discover.presenter;
 
 import android.app.Application;
 
 import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
+import com.example.tasty_food_app.home.home.discover.view.DiscoverView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
