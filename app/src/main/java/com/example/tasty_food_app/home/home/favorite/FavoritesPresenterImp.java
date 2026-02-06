@@ -1,0 +1,60 @@
+package com.example.tasty_food_app.home.home.favorite;
+
+import android.app.Application;
+import android.content.Context;
+
+import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.repository.MealRepository;
+import com.example.tasty_food_app.home.home.discover.view.DiscoverView;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+public class FavoritesPresenterImp implements FavoritesPresenter{
+
+    private FavoritesView favoritesView;
+    private MealRepository mealRepository;
+    private CompositeDisposable disposable = new CompositeDisposable();
+
+    public FavoritesPresenterImp(FavoritesView favoritesView, MealRepository mealRepository) {
+        this.favoritesView = favoritesView;
+        this.mealRepository = mealRepository;
+    }
+
+    @Override
+    public void getFavoriteMeals() {
+
+        disposable.add(
+                mealRepository.getStoredMeals()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                meals -> favoritesView.showFavoriteMeals(meals),
+                                throwable -> favoritesView.showError(throwable.getMessage())
+                        )
+        );
+    }
+
+    @Override
+    public void removeMeal(Meal meal) {
+
+        disposable.add(
+                mealRepository.deleteMeal(meal)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> favoritesView.showMessage("Removed: " + meal.getStrMeal()),
+                                throwable -> favoritesView.showError(throwable.getMessage())
+                        )
+        );
+    }
+
+    @Override
+    public void clearResources() {
+
+        disposable.clear();
+    }
+
+
+}
