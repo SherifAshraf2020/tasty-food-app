@@ -51,6 +51,6 @@
         tools:layout="@layout/fragment_search" />
 
     <action
-        android:id="@+id/action_global_to_searchFragment"
+        android:id="@+id/action_discoverFragment_to_searchFragment"
         app:destination="@id/searchFragment" />
 </navigation>
