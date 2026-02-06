@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.home.home.favorite;
+package com.example.tasty_food_app.home.home.favorite.view;
 
 import android.os.Bundle;
 
@@ -17,8 +17,8 @@ import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.model.Meal;
 
 import com.example.tasty_food_app.datasource.repository.MealRepository;
-import com.example.tasty_food_app.home.home.discover.presenter.DiscoverPresenterImp;
-import com.example.tasty_food_app.home.home.favorite.view.FavoritesAdapter;
+import com.example.tasty_food_app.home.home.favorite.presenter.FavoritesPresenter;
+import com.example.tasty_food_app.home.home.favorite.presenter.FavoritesPresenterImp;
 
 import java.util.ArrayList;
 import java.util.List;

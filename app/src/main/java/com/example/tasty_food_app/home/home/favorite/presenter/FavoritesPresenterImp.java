@@ -1,11 +1,8 @@
-package com.example.tasty_food_app.home.home.favorite;
-
-import android.app.Application;
-import android.content.Context;
+package com.example.tasty_food_app.home.home.favorite.presenter;
 
 import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
-import com.example.tasty_food_app.home.home.discover.view.DiscoverView;
+import com.example.tasty_food_app.home.home.favorite.view.FavoritesView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
