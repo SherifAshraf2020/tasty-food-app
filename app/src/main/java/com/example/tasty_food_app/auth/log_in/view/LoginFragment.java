@@ -36,7 +36,7 @@ import android.util.Log;
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.auth.log_in.presenter.LoginPresenter;
 import com.example.tasty_food_app.auth.log_in.presenter.LoginPresenterImp;
-import com.example.tasty_food_app.datasource.remote.AuthRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.google.android.material.textfield.TextInputEditText;
 

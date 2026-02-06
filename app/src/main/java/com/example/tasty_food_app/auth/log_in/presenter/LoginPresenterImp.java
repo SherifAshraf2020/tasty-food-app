@@ -1,7 +1,7 @@
 package com.example.tasty_food_app.auth.log_in.presenter;
 
 import com.example.tasty_food_app.auth.log_in.view.LoginView;
-import com.example.tasty_food_app.datasource.remote.AuthNetworkResponse;
+import com.example.tasty_food_app.datasource.remote.auth.AuthNetworkResponse;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
 
 public class LoginPresenterImp implements LoginPresenter{

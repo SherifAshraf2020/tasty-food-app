@@ -21,7 +21,7 @@ import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.auth.sign_up.presenter.SignUpPresenter;
 import com.example.tasty_food_app.auth.sign_up.presenter.SignUpPresenterImp;
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
-import com.example.tasty_food_app.datasource.remote.AuthRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.google.firebase.auth.FirebaseAuth;
 

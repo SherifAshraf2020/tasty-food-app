@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.datasource.remote;
+package com.example.tasty_food_app.datasource.remote.auth;
 
 import com.google.firebase.auth.FirebaseAuth;
 
