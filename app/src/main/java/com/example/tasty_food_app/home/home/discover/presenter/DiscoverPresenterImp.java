@@ -61,14 +61,28 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
 
     @Override
     public void addToFavorites(Meal meal) {
-        // Implement Room later
-        discoverView.showMessage("Added " + meal.getStrMeal() + " to favorites");
+        disposable.add(
+                mealRepository.insertMeal(meal)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> discoverView.showMessage("Added " + meal.getStrMeal() + " to favorites"),
+                                throwable -> discoverView.showError("Failed to add: " + throwable.getMessage())
+                        )
+        );
     }
 
     @Override
     public void deleteMealFromFav(Meal meal) {
-        // Implement Room later
-        discoverView.showMessage("deleted " + meal.getStrMeal() + " from favorites");
+        disposable.add(
+                mealRepository.deleteMeal(meal)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> discoverView.showMessage("Deleted " + meal.getStrMeal() + " from favorites"),
+                                throwable -> discoverView.showError("Failed to delete: " + throwable.getMessage())
+                        )
+        );
     }
 
 
