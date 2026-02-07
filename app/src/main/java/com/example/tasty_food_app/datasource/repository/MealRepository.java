@@ -7,12 +7,14 @@ import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.local.MealLocalDataSource;
 import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.model.MealResponse;
+import com.example.tasty_food_app.datasource.model.RecentMeal;
 import com.example.tasty_food_app.datasource.remote.meal.MealRemoteDataSource;
 
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class MealRepository {
@@ -73,5 +75,21 @@ public class MealRepository {
 
 
 
+
+
+
+    public Completable insertRecentlyViewed(Meal meal) {
+        RecentMeal recent = new RecentMeal(
+                meal.getIdMeal(),
+                meal.getStrMeal(),
+                meal.getStrMealThumb(),
+                System.currentTimeMillis()
+        );
+        return mealLocalDataSource.insertRecentlyViewed(recent);
+    }
+
+    public Observable<List<RecentMeal>> getRecentlyViewedMeals() {
+        return mealLocalDataSource.getRecentlyViewedMeals();
+    }
 
 }

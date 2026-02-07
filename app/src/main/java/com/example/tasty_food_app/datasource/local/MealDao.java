@@ -7,11 +7,13 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.model.RecentMeal;
 
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 @Dao
@@ -27,4 +29,16 @@ public interface MealDao {
 
     @Query("SELECT EXISTS (SELECT 1 FROM meals_table WHERE idMeal = :id)")
     Single<Boolean> isFavorite(String id);
+
+
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Completable insertRecentlyViewed(RecentMeal meal);
+
+    @Query("SELECT * FROM recent_meals_table ORDER BY viewedAt DESC LIMIT 10")
+    Observable<List<RecentMeal>> getRecentlyViewed();
+
+    @Query("DELETE FROM recent_meals_table")
+    Completable clearAllRecent();
 }
