@@ -29,6 +29,8 @@ public class DetailsPresenterImp implements DetailsPresenter{
                                 meal -> {
                                     detailsView.hideLoading();
                                     detailsView.showMealDetails(meal);
+
+                                    addMealToRecentlyViewed(meal);
                                 },
                                 throwable -> {
                                     detailsView.hideLoading();
@@ -81,5 +83,22 @@ public class DetailsPresenterImp implements DetailsPresenter{
     public void clearResources() {
         disposables.clear();
         detailsView = null;
+    }
+
+    @Override
+    public void addMealToRecentlyViewed(Meal meal) {
+        disposables.add(
+                mealRepository.insertRecentlyViewed(meal)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> {
+                                    android.util.Log.d("DetailsPresenter", "Added to Recent Table: " + meal.getStrMeal());
+                                },
+                                throwable -> {
+                                    android.util.Log.e("DetailsPresenter", "Error adding to Recent: " + throwable.getMessage());
+                                }
+                        )
+        );
     }
 }

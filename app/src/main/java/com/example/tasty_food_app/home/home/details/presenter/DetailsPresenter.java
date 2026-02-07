@@ -8,4 +8,7 @@ public interface DetailsPresenter {
     void deleteMealFromFav(Meal meal);
     void checkIsFavorite(String mealId);
     void clearResources();
+
+
+    void addMealToRecentlyViewed(Meal meal);
 }
