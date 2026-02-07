@@ -8,9 +8,9 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DetailsPresenterImp implements DetailsPresenter{
-    DetailsView detailsView;
-    MealRepository mealRepository;
-    CompositeDisposable disposable = new CompositeDisposable();
+    private DetailsView detailsView;
+    private MealRepository mealRepository;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     public DetailsPresenterImp(DetailsView detailsView, MealRepository mealRepository) {
         this.detailsView = detailsView;
@@ -19,70 +19,66 @@ public class DetailsPresenterImp implements DetailsPresenter{
 
     @Override
     public void getMealDetails(String mealId) {
-        disposable.add(
+        disposables.add(
                 mealRepository.getMealById(mealId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(disposable -> detailsView.showLoading())
                         .subscribe(
-                                response -> {
-                                    if (response.getMeals() != null && !response.getMeals().isEmpty()) {
-                                        Meal meal = response.getMeals().get(0);
-                                        detailsView.showMealDetails(meal);
-                                        checkIsFavorite(meal.getIdMeal());
-                                    }
+                                meal -> {
+                                    detailsView.hideLoading();
+                                    detailsView.showMealDetails(meal);
                                 },
-                                throwable -> detailsView.showError("Failed to fetch meal details: " + throwable.getMessage())
+                                throwable -> {
+                                    detailsView.hideLoading();
+                                    detailsView.showErrorMessage(throwable.getMessage());
+                                }
                         )
         );
     }
 
     @Override
     public void addToFavorites(Meal meal) {
-        disposable.add(
+        disposables.add(
                 mealRepository.insertMeal(meal)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> {
-                                    detailsView.updateFavoriteStatus(true);
-                                    detailsView.showMessage("Added to Favorites");
-                                },
-                                throwable -> detailsView.showError("Could not add to favorites")
+                                () -> detailsView.onFavoriteAdded(meal),
+                                throwable -> detailsView.showErrorMessage("Failed to add: " + throwable.getMessage())
                         )
         );
     }
 
     @Override
     public void deleteMealFromFav(Meal meal) {
-        disposable.add(
+        disposables.add(
                 mealRepository.deleteMeal(meal)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> {
-                                    detailsView.updateFavoriteStatus(false);
-                                    detailsView.showMessage("Removed from Favorites");
-                                },
-                                throwable -> detailsView.showError("Could not remove from favorites")
+                                () -> detailsView.onFavoriteDeleted(meal),
+                                throwable -> detailsView.showErrorMessage("Failed to delete: " + throwable.getMessage())
                         )
         );
     }
 
     @Override
     public void checkIsFavorite(String mealId) {
-        disposable.add(
+        disposables.add(
                 mealRepository.isFavorite(mealId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                isFav -> detailsView.updateFavoriteStatus(isFav),
-                                throwable -> detailsView.updateFavoriteStatus(false)
+                                isFav -> detailsView.updateFavoriteIcon(isFav),
+                                throwable -> detailsView.showErrorMessage(throwable.getMessage())
                         )
         );
     }
 
     @Override
     public void clearResources() {
-        disposable.clear();
+        disposables.clear();
+        detailsView = null;
     }
 }
