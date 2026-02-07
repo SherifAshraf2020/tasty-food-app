@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.home.home.recently;
+package com.example.tasty_food_app.home.home.recently.view;
 
 import android.os.Bundle;
 
@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.model.RecentMeal;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
+import com.example.tasty_food_app.home.home.recently.presenter.RecentlyPresenter;
+import com.example.tasty_food_app.home.home.recently.presenter.RecentlyPresenterImp;
 
 import java.util.ArrayList;
 import java.util.List;

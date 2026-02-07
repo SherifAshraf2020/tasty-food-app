@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.home.home.recently;
+package com.example.tasty_food_app.home.home.recently.view;
 
 
 import android.view.LayoutInflater;
