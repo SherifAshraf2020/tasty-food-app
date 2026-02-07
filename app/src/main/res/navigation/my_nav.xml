@@ -70,4 +70,13 @@
         app:destination="@id/detailsFragment" />
 
 
+
+
+        <action
+            android:id="@+id/action_recentlyFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+
+
+
+
 </navigation>
