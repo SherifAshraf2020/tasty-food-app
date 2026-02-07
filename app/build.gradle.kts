@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.navigation.ui.ktx)
     implementation(libs.fragment)
     implementation(libs.viewpager2)
+    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -72,4 +73,8 @@ dependencies {
     implementation("com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0")
 
     implementation("androidx.room:room-rxjava3:$room_version")
+
+
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:13.0.0")
+
 }

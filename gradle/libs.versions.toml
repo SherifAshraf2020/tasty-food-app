@@ -16,6 +16,7 @@ viewpager2 = "1.1.0"
 roomRuntime = "2.8.4"
 retrofit = "3.0.0"
 glide = "5.0.5"
+recyclerview = "1.4.0"
 
 
 [libraries]
@@ -37,6 +38,7 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRunti
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 convertar-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 
 
 [plugins]
