@@ -47,8 +47,9 @@ public class MealRepository {
         return mealRemoteDataSource.getMealsByFirstLetter(letter);
     }
 
-    public Single<MealResponse> getMealById(String mealId) {
-        return mealRemoteDataSource.getMealDetails(mealId);
+    public Single<Meal> getMealById(String mealId) {
+        return mealRemoteDataSource.getMealDetails(mealId)
+                .map(response -> response.getMeals().get(0));
     }
 
 

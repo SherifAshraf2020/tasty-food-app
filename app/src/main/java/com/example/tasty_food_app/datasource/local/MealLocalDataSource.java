@@ -20,8 +20,6 @@ public class MealLocalDataSource {
     }
 
 
-
-
     public Completable insertMeal(Meal meal) {
         return mealDao.insertMeal(meal);
     }

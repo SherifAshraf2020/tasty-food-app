@@ -1,13 +1,14 @@
 package com.example.tasty_food_app.datasource.model;
 
 public class Ingredient {
-
-
     private String name;
     private String measure;
+    private String imageUrl;
+
     public Ingredient(String name, String measure) {
         this.name = name;
         this.measure = measure;
+        this.imageUrl = "https://www.themealdb.com/images/ingredients/" + name + "-Small.png";
     }
 
     public String getName() {
@@ -18,10 +19,7 @@ public class Ingredient {
         return measure;
     }
 
-
     public String getImageUrl() {
-        if (name != null && !name.isEmpty()) {
-            return "https://www.themealdb.com/images/ingredients/" + name.replace(" ", "%20") + "-Small.png";
-        }
-        return "";
-    }}
+        return imageUrl;
+    }
+}
