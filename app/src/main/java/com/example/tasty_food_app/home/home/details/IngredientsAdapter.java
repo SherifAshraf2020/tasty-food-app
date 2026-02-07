@@ -16,32 +16,36 @@ import java.util.List;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.ViewHolder> {
 
-    private List<Ingredient> ingredientList = new ArrayList<>();
+    private List<Ingredient> ingredientList;
 
-    public void setList(List<Ingredient> list) {
-        this.ingredientList = list;
+    public IngredientsAdapter(List<Ingredient> ingredientList) {
+        this.ingredientList = ingredientList;
+    }
+
+    public void setList(List<Ingredient> ingredientList) {
+        this.ingredientList = ingredientList;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_ingredient, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ingredient, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Ingredient currentItem = ingredientList.get(position);
+        Ingredient currentIngredient = ingredientList.get(position);
 
-        holder.tvName.setText(currentItem.getName());
-        holder.tvMeasure.setText(currentItem.getMeasure());
+        holder.tvName.setText(currentIngredient.getName());
+        holder.tvMeasure.setText(currentIngredient.getMeasure());
 
         Glide.with(holder.itemView.getContext())
-                .load(currentItem.getImageUrl())
+                .load(currentIngredient.getImageUrl())
                 .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_foreground);
+                .error(R.drawable.ic_launcher_background)
+                .into(holder.imgIngredient);
     }
 
     @Override

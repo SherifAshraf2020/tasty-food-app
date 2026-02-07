@@ -3,11 +3,15 @@ package com.example.tasty_food_app.home.home.details;
 import com.example.tasty_food_app.datasource.model.Meal;
 
 public interface DetailsView {
+    void showLoading();
+    void hideLoading();
     void showMealDetails(Meal meal);
+    void showErrorMessage(String message);
 
-    void updateFavoriteStatus(boolean isFavorite);
 
-    void showError(String errorMessage);
+    void onFavoriteAdded(Meal meal);
+    void onFavoriteDeleted(Meal meal);
 
-    void showMessage(String message);
+
+    void updateFavoriteIcon(boolean isFavorite);
 }
