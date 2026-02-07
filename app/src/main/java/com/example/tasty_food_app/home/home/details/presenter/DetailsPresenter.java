@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.home.home.details;
+package com.example.tasty_food_app.home.home.details.presenter;
 
 import com.example.tasty_food_app.datasource.model.Meal;
 

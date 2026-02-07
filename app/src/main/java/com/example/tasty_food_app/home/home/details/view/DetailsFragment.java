@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.home.home.details;
+package com.example.tasty_food_app.home.home.details.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +19,8 @@ import com.bumptech.glide.Glide;
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
+import com.example.tasty_food_app.home.home.details.presenter.DetailsPresenter;
+import com.example.tasty_food_app.home.home.details.presenter.DetailsPresenterImp;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;

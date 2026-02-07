@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.home.home.details;
+package com.example.tasty_food_app.home.home.details.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.model.Ingredient;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.ViewHolder> {
