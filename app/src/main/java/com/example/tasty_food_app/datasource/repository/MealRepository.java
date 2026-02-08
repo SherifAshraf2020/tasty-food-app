@@ -8,6 +8,9 @@ import com.example.tasty_food_app.datasource.local.MealLocalDataSource;
 import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.model.MealResponse;
 import com.example.tasty_food_app.datasource.model.RecentMeal;
+import com.example.tasty_food_app.datasource.model.area.AreaResponse;
+import com.example.tasty_food_app.datasource.model.category.CategoryResponse;
+import com.example.tasty_food_app.datasource.model.ingredient.IngredientResponse;
 import com.example.tasty_food_app.datasource.remote.meal.MealRemoteDataSource;
 
 import java.util.List;
@@ -90,6 +93,43 @@ public class MealRepository {
 
     public Observable<List<RecentMeal>> getRecentlyViewedMeals() {
         return mealLocalDataSource.getRecentlyViewedMeals();
+    }
+
+
+
+
+
+
+
+
+
+
+    public Single<AreaResponse> getAreas() {
+        return mealRemoteDataSource.getAreas();
+    }
+
+    public Single<CategoryResponse> getCategories() {
+        return mealRemoteDataSource.getCategories();
+    }
+
+    public Single<IngredientResponse> getIngredients() {
+        return mealRemoteDataSource.getIngredients();
+    }
+
+    public Single<MealResponse> searchMealsByName(String name) {
+        return mealRemoteDataSource.searchMealsByName(name);
+    }
+
+    public Single<MealResponse> filterByArea(String area) {
+        return mealRemoteDataSource.getMealsByArea(area);
+    }
+
+    public Single<MealResponse> filterByCategory(String category) {
+        return mealRemoteDataSource.getMealsByCategory(category);
+    }
+
+    public Single<MealResponse> filterByIngredient(String ingredient) {
+        return mealRemoteDataSource.getMealsByIngredient(ingredient);
     }
 
 }
