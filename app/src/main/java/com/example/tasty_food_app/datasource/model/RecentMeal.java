@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "recent_meals_table") // جدول منفصل تماماً عن الفيفورت
+@Entity(tableName = "recent_meals_table")
 public class RecentMeal {
     @PrimaryKey
     @NonNull

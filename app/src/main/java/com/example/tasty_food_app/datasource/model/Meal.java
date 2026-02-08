@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.example.tasty_food_app.datasource.model.ingredient.Ingredient;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
