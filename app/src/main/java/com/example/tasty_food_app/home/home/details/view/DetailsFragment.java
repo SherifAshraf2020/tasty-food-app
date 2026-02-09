@@ -53,7 +53,6 @@ public class DetailsFragment extends Fragment implements DetailsView {
         initViews(view);
         setupIngredientsRecyclerView();
 
-        // --- تعديل: استقبال الـ Bundle يدوي ---
         String mealId = "";
         if (getArguments() != null) {
             mealId = getArguments().getString("mealId");
