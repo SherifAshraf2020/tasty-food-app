@@ -6,6 +6,7 @@ import com.example.tasty_food_app.datasource.model.category.CategoryResponse;
 import com.example.tasty_food_app.datasource.model.ingredient.IngredientResponse;
 import com.example.tasty_food_app.datasource.network.Network;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class MealRemoteDataSource {
@@ -30,32 +31,32 @@ public class MealRemoteDataSource {
 
 
 
-    public Single<AreaResponse> getAreas() {
+    public Observable<AreaResponse> getAreas() {
         return mealService.getAreas();
     }
 
-    public Single<CategoryResponse> getCategories() {
+    public Observable<CategoryResponse> getCategories() {
         return mealService.getCategories();
     }
 
-    public Single<IngredientResponse> getIngredients() {
+    public Observable<IngredientResponse> getIngredients() {
         return mealService.getIngredients();
     }
 
 
-    public Single<MealResponse> searchMealsByName(String name) {
+    public Observable<MealResponse> searchMealsByName(String name) {
         return mealService.searchMealsByName(name);
     }
 
-    public Single<MealResponse> getMealsByArea(String area) {
+    public Observable<MealResponse> getMealsByArea(String area) {
         return mealService.filterByArea(area);
     }
 
-    public Single<MealResponse> getMealsByCategory(String category) {
+    public Observable<MealResponse> getMealsByCategory(String category) {
         return mealService.filterByCategory(category);
     }
 
-    public Single<MealResponse> getMealsByIngredient(String ingredient) {
+    public Observable<MealResponse> getMealsByIngredient(String ingredient) {
         return mealService.filterByIngredient(ingredient);
     }
 }

@@ -5,6 +5,7 @@ import com.example.tasty_food_app.datasource.model.area.AreaResponse;
 import com.example.tasty_food_app.datasource.model.category.CategoryResponse;
 import com.example.tasty_food_app.datasource.model.ingredient.IngredientResponse;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -24,23 +25,23 @@ public interface MealService {
 
 
     @GET("search.php")
-    Single<MealResponse> searchMealsByName(@Query("s") String name);
+    Observable<MealResponse> searchMealsByName(@Query("s") String name);
 
     @GET("list.php?a=list")
-    Single<AreaResponse> getAreas();
+    Observable<AreaResponse> getAreas();
 
     @GET("categories.php")
-    Single<CategoryResponse> getCategories();
+    Observable<CategoryResponse> getCategories();
 
     @GET("list.php?i=list")
-    Single<IngredientResponse> getIngredients();
+    Observable<IngredientResponse> getIngredients();
 
     @GET("filter.php")
-    Single<MealResponse> filterByArea(@Query("a") String area);
+    Observable<MealResponse> filterByArea(@Query("a") String area);
 
     @GET("filter.php")
-    Single<MealResponse> filterByCategory(@Query("c") String category);
+    Observable<MealResponse> filterByCategory(@Query("c") String category);
 
     @GET("filter.php")
-    Single<MealResponse> filterByIngredient(@Query("i") String ingredient);
+    Observable<MealResponse> filterByIngredient(@Query("i") String ingredient);
 }

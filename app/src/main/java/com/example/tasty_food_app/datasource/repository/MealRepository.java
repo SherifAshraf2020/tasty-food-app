@@ -104,31 +104,31 @@ public class MealRepository {
 
 
 
-    public Single<AreaResponse> getAreas() {
+    public Observable<AreaResponse> getAreas() {
         return mealRemoteDataSource.getAreas();
     }
 
-    public Single<CategoryResponse> getCategories() {
+    public Observable<CategoryResponse> getCategories() {
         return mealRemoteDataSource.getCategories();
     }
 
-    public Single<IngredientResponse> getIngredients() {
+    public Observable<IngredientResponse> getIngredients() {
         return mealRemoteDataSource.getIngredients();
     }
 
-    public Single<MealResponse> searchMealsByName(String name) {
+    public Observable<MealResponse> searchMealsByName(String name) {
         return mealRemoteDataSource.searchMealsByName(name);
     }
 
-    public Single<MealResponse> filterByArea(String area) {
+    public Observable<MealResponse> filterByArea(String area) {
         return mealRemoteDataSource.getMealsByArea(area);
     }
 
-    public Single<MealResponse> filterByCategory(String category) {
+    public Observable<MealResponse> filterByCategory(String category) {
         return mealRemoteDataSource.getMealsByCategory(category);
     }
 
-    public Single<MealResponse> filterByIngredient(String ingredient) {
+    public Observable<MealResponse> filterByIngredient(String ingredient) {
         return mealRemoteDataSource.getMealsByIngredient(ingredient);
     }
 
