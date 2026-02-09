@@ -46,7 +46,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.tasty_food_app.SearchFragment"
+        android:name="com.example.tasty_food_app.home.home.search.view.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
 

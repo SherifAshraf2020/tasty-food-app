@@ -23,4 +23,12 @@
     <color name="field_focus_stroke">#FF6A00</color>
     <color name="field_default_stroke">#D1D1D1</color>
     <color name="error_red">#E53935</color>
+
+
+    <color name="light_orange_bg">#FFF3E0</color>
+    <color name="chip_unselected_bg">#F5F5F5</color>
+
+    <color name="orange_transparent_20">#33FF6A00</color>
+    <color name="category_grad_start">#FF9D5C</color>
+    <color name="category_grad_end">#FF6A00</color>
 </resources>
