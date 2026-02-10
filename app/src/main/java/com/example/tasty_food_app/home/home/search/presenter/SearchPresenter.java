@@ -6,6 +6,10 @@ import java.util.List;
 
 public interface SearchPresenter {
 
+
+    void addToPlan(Meal meal, String day, String userId);
+
+
     void addToFavorite(Meal meal);
     void removeFromFavorite(Meal meal);
     void checkFavoritesAndShow(List<Meal> apiMeals);

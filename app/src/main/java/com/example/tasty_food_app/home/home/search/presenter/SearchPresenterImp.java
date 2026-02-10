@@ -79,6 +79,26 @@ public class SearchPresenterImp implements SearchPresenter {
     }
 
     @Override
+    public void addToPlan(Meal meal, String day, String userId) {
+        com.example.tasty_food_app.datasource.model.PlanMeal planMeal =
+                new com.example.tasty_food_app.datasource.model.PlanMeal(
+                        meal.getIdMeal(),
+                        meal.getStrMeal(),
+                        meal.getStrMealThumb(),
+                        day,
+                        userId
+                );
+
+        disposable.add(mealRepository.insertPlanMeal(planMeal)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> { },
+                        throwable -> searchView.showError(throwable.getMessage())
+                ));
+    }
+
+    @Override
     public void addToFavorite(Meal meal) {
         disposable.add(mealRepository.insertMeal(meal)
                 .subscribeOn(Schedulers.io())

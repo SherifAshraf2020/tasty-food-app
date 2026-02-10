@@ -38,6 +38,9 @@ import java.util.List;
 public class SearchFragment extends Fragment implements SearchView , OnSearchClick{
 
     private final List<?> EMPTY_LIST = new ArrayList<>(0);
+    private String selectedDay = null;
+    private String userId = "";
+
 
 
     private EditText etSearch;
@@ -61,6 +64,15 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (getArguments() != null && getArguments().containsKey("selected_day")) {
+            selectedDay = getArguments().getString("selected_day");
+        }
+
+        if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() != null) {
+            userId = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
+
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new androidx.activity.OnBackPressedCallback(true) {
             @Override
@@ -317,7 +329,17 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
 
     @Override
     public void onMealClick(Meal meal) {
-        navigateToDetails(meal.getIdMeal());
+        if (selectedDay != null && !selectedDay.isEmpty() && !selectedDay.equalsIgnoreCase("none")) {
+
+            presenter.addToPlan(meal, selectedDay, userId);
+
+            Toast.makeText(getContext(), "Added to " + selectedDay, Toast.LENGTH_SHORT).show();
+
+            androidx.navigation.Navigation.findNavController(requireView()).popBackStack();
+
+        } else {
+            navigateToDetails(meal.getIdMeal());
+        }
     }
 
     @Override
