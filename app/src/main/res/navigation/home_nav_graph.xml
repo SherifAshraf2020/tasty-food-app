@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/mealPlanFragment"
-        android:name="com.example.tasty_food_app.home.mealplan.MealPlanFragment"
+        android:name="com.example.tasty_food_app.home.mealplan.view.MealPlanFragment"
         android:label="fragment_meal_plan"
         tools:layout="@layout/fragment_meal_plan" />
     <fragment
