@@ -7,6 +7,7 @@ import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.local.MealLocalDataSource;
 import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.model.MealResponse;
+import com.example.tasty_food_app.datasource.model.PlanMeal;
 import com.example.tasty_food_app.datasource.model.RecentMeal;
 import com.example.tasty_food_app.datasource.model.area.AreaResponse;
 import com.example.tasty_food_app.datasource.model.category.CategoryResponse;
@@ -132,4 +133,31 @@ public class MealRepository {
         return mealRemoteDataSource.getMealsByIngredient(ingredient);
     }
 
+
+
+
+
+
+    public Completable insertPlanMeal(PlanMeal planMeal){
+        return mealLocalDataSource.insertPlanMeal(planMeal);
+    }
+
+    public Completable deletePlanMeal(PlanMeal planMeal){
+        return mealLocalDataSource.deletePlanMeal(planMeal);
+    }
+
+    public Observable<List<PlanMeal>> getPlanMealsByDay(String userId, String day) {
+        return mealLocalDataSource.getMealsByDay(userId, day);
+    }
+
+    public Observable<List<PlanMeal>> getAllPlannedMeals(String userId){
+        return mealLocalDataSource.getAllPlannedMeals(userId);
+    }
+
+
+
+    public Single<Meal> getRandomMealForPlan() {
+        return mealRemoteDataSource.getRandomMeal()
+                .map(response -> response.getMeals().get(0)); //random meal for plan
+    }
 }

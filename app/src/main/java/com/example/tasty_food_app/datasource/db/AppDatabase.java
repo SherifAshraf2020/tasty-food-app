@@ -7,15 +7,19 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.tasty_food_app.datasource.local.MealDao;
+import com.example.tasty_food_app.datasource.local.PlanDao;
 import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.model.PlanMeal;
 import com.example.tasty_food_app.datasource.model.RecentMeal;
 
-@Database(entities = {Meal.class, RecentMeal.class}, version = 2, exportSchema = false)
+@Database(entities = {Meal.class, RecentMeal.class, PlanMeal.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance = null;
 
     public abstract MealDao mealDao();
+    public abstract PlanDao planDao();
+
 
     public static synchronized AppDatabase getInstance(Context context) {
         if (instance == null) {
