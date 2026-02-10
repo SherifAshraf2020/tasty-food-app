@@ -1,26 +1,50 @@
 package com.example.tasty_food_app.datasource.remote.auth;
 
+import android.content.Context;
+
+import io.reactivex.rxjava3.core.Completable;
+
 public class AuthRemoteDataSource {
     private EmailAuthService emailAuthService;
     private GoogleAuthService googleAuthService;
 
-    public AuthRemoteDataSource() {
+    public AuthRemoteDataSource(Context context) {
         this.emailAuthService = new EmailAuthService();
-        this.googleAuthService = new GoogleAuthService();
+        this.googleAuthService = new GoogleAuthService(context);
     }
 
-    public void signUpWithEmail(String email, String password, AuthNetworkResponse callback) {
-        emailAuthService.signUp(email, password, callback);
-    }
-    public void logInWithEmail(String email, String password, AuthNetworkResponse callback) {
-        emailAuthService.signIn(email, password, callback);
+    public Completable signUpWithEmail(String email, String password) {
+        return emailAuthService.signUp(email, password);
     }
 
-    public void resetPassword(String email, AuthNetworkResponse callback) {
-        emailAuthService.resetPassword(email, callback);
+    public Completable logInWithEmail(String email, String password) {
+        return emailAuthService.signIn(email, password);
     }
 
-    public void logInWithGoogle(String idToken, AuthNetworkResponse callback) {
-        googleAuthService.signInWithGoogle(idToken, callback);
+    public Completable resetPassword(String email) {
+        return emailAuthService.resetPassword(email);
+    }
+
+
+
+
+
+
+
+
+
+    public Completable logInWithGoogle(String idToken) {
+        return googleAuthService.signInWithGoogle(idToken);
+    }
+
+
+
+
+
+
+
+    public Completable signOut() {
+        return emailAuthService.signOut()
+                .andThen(googleAuthService.signOut());
     }
 }

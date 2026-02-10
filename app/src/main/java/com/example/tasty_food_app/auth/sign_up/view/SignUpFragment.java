@@ -28,10 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUpFragment extends Fragment implements SignUpView{
 
-    //private TextInputEditText etName, etEmail, etPassword;
-    private FirebaseAuth mAuth;
-
-    private SignUpPresenter presenter;
+    private SignUpPresenterImp presenter;
     private EditText etName, etEmail, etPassword;
     private Button btnSignUp;
     private ProgressBar progressBar;
@@ -40,11 +37,7 @@ public class SignUpFragment extends Fragment implements SignUpView{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mAuth = FirebaseAuth.getInstance();
-
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_up, container, false);
-
     }
 
     @Override
@@ -58,12 +51,12 @@ public class SignUpFragment extends Fragment implements SignUpView{
         progressBar = view.findViewById(R.id.progressBar);
         tvLoginPage = view.findViewById(R.id.tvLoginPage);
 
+        AuthRepository repository = AuthRepository.getInstance(
+                new AuthRemoteDataSource(requireContext()),
+                new SharedPrefsLocalDataSource(requireContext())
+        );
 
-        presenter = new SignUpPresenterImp(this,
-                AuthRepository.getInstance(
-                        new AuthRemoteDataSource(),
-                        new SharedPrefsLocalDataSource(requireContext())
-                ));
+        presenter = new SignUpPresenterImp(this, repository);
 
         btnSignUp.setOnClickListener(v -> {
             String name = etName.getText().toString().trim();
@@ -75,7 +68,11 @@ public class SignUpFragment extends Fragment implements SignUpView{
             }
         });
 
+        tvLoginPage.setOnClickListener(v ->
+                Navigation.findNavController(v).navigateUp()
+        );
     }
+
     private boolean validateInputs(String name, String email, String pass) {
         if (name.isEmpty() || email.isEmpty() || pass.isEmpty()) {
             Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
@@ -87,7 +84,6 @@ public class SignUpFragment extends Fragment implements SignUpView{
         }
         return true;
     }
-
 
     @Override
     public void showLoading() {
@@ -105,12 +101,20 @@ public class SignUpFragment extends Fragment implements SignUpView{
 
     @Override
     public void onSignUpSuccess() {
-        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-         Navigation.findNavController(requireView()).navigate(R.id.action_auth_graph_to_home_nav_graph);
+        Toast.makeText(getContext(), "Account Created Successfully", Toast.LENGTH_SHORT).show();
+        Navigation.findNavController(requireView()).navigate(R.id.action_auth_graph_to_home_nav_graph);
     }
 
     @Override
     public void onSignUpError(String error) {
         Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.clear();
+        }
     }
 }

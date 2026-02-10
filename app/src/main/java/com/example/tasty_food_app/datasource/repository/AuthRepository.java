@@ -4,9 +4,13 @@ import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.remote.auth.AuthNetworkResponse;
 import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class AuthRepository {
-    private AuthRemoteDataSource authRemoteDataSource;
-    private SharedPrefsLocalDataSource sharedPrefsLocalDataSource;
+    private final AuthRemoteDataSource authRemoteDataSource;
+    private final SharedPrefsLocalDataSource sharedPrefsLocalDataSource;
     private static AuthRepository instance = null;
 
     private AuthRepository(AuthRemoteDataSource authRemoteDataSource, SharedPrefsLocalDataSource sharedPrefsLocalDataSource) {
@@ -22,11 +26,7 @@ public class AuthRepository {
     }
 
 
-    public void saveUserSession(String email) {
-        sharedPrefsLocalDataSource.saveUserSession(email);
-    }
-
-    public boolean isUserLoggedIn() {
+    public Single<Boolean> isUserLoggedIn() {
         return sharedPrefsLocalDataSource.isLoggedIn();
     }
 
@@ -38,24 +38,35 @@ public class AuthRepository {
         return sharedPrefsLocalDataSource.isOnBoardingFinished();
     }
 
-    public void logout() {
-        sharedPrefsLocalDataSource.clearSession();
+    public Completable logout() {
+        return authRemoteDataSource.signOut()
+                .andThen(sharedPrefsLocalDataSource.clearSession())
+                .subscribeOn(Schedulers.io());
     }
 
 
-    public void SignUpWithEmail(String email, String password, AuthNetworkResponse callback) {
-        authRemoteDataSource.signUpWithEmail(email, password, callback);
+
+
+    public Completable signUpWithEmail(String email, String password) {
+        return authRemoteDataSource.signUpWithEmail(email, password)
+                .andThen(sharedPrefsLocalDataSource.saveUserSession(email))
+                .subscribeOn(Schedulers.io());
     }
 
-    public void LogInWithEmail(String email, String password, AuthNetworkResponse callback) {
-        authRemoteDataSource.logInWithEmail(email, password, callback);
+    public Completable logInWithEmail(String email, String password) {
+        return authRemoteDataSource.logInWithEmail(email, password)
+                .andThen(sharedPrefsLocalDataSource.saveUserSession(email))
+                .subscribeOn(Schedulers.io());
     }
 
-    public void ResetPassword(String email, AuthNetworkResponse callback) {
-        authRemoteDataSource.resetPassword(email, callback);
+    public Completable logInWithGoogle(String idToken, String email) {
+        return authRemoteDataSource.logInWithGoogle(idToken)
+                .andThen(sharedPrefsLocalDataSource.saveUserSession(email))
+                .subscribeOn(Schedulers.io());
     }
 
-    public void LogInWithGoogle(String idToken, AuthNetworkResponse callback) {
-        authRemoteDataSource.logInWithGoogle(idToken, callback);
+    public Completable resetPassword(String email) {
+        return authRemoteDataSource.resetPassword(email)
+                .subscribeOn(Schedulers.io());
     }
 }

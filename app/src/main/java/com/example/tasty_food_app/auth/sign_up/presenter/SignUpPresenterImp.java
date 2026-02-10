@@ -4,10 +4,14 @@ import com.example.tasty_food_app.auth.sign_up.view.SignUpView;
 import com.example.tasty_food_app.datasource.remote.auth.AuthNetworkResponse;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+
 public class SignUpPresenterImp implements SignUpPresenter {
 
-    private SignUpView signUpView;
-    private AuthRepository authRepository;
+    private final SignUpView signUpView;
+    private final AuthRepository authRepository;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     public SignUpPresenterImp(SignUpView signUpView, AuthRepository authRepository) {
         this.signUpView = signUpView;
@@ -16,26 +20,30 @@ public class SignUpPresenterImp implements SignUpPresenter {
 
     @Override
     public void signUp(String name, String email, String password) {
-        if (signUpView != null) {
-            signUpView.showLoading();
+        if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
+            signUpView.onSignUpError("Please fill all fields");
+            return;
         }
-        authRepository.SignUpWithEmail(email, password, new AuthNetworkResponse() {
-            @Override
-            public void onSuccess() {
-                if (signUpView != null) {
-                    signUpView.hideLoading();
-                    signUpView.onSignUpSuccess();
-                }
-            }
 
-            @Override
-            public void onFailure(String error) {
-                if(signUpView != null)
-                {
-                    signUpView.hideLoading();
-                    signUpView.onSignUpError(error);
-                }
-            }
-        });
+        signUpView.showLoading();
+
+        disposable.add(
+                authRepository.signUpWithEmail(email, password)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> {
+                                    signUpView.hideLoading();
+                                    signUpView.onSignUpSuccess();
+                                },
+                                throwable -> {
+                                    signUpView.hideLoading();
+                                    signUpView.onSignUpError(throwable.getMessage());
+                                }
+                        )
+        );
+    }
+
+    public void clear() {
+        disposable.clear();
     }
 }

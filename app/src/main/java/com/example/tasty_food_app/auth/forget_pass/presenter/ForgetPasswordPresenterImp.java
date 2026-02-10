@@ -4,31 +4,45 @@ import com.example.tasty_food_app.auth.forget_pass.view.ForgetPasswordView;
 import com.example.tasty_food_app.datasource.remote.auth.AuthNetworkResponse;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
 
-public class ForgetPasswordPresenterImp implements ForgetPasswordPresenter {
-    private ForgetPasswordView forgetPasswordView;
-    private AuthRepository authRepository;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-    public  ForgetPasswordPresenterImp(ForgetPasswordView forgetPasswordView, AuthRepository authRepository){
+public class ForgetPasswordPresenterImp implements ForgetPasswordPresenter {
+    private final ForgetPasswordView forgetPasswordView;
+    private final AuthRepository authRepository;
+    private final CompositeDisposable disposable = new CompositeDisposable();
+
+    public ForgetPasswordPresenterImp(ForgetPasswordView forgetPasswordView, AuthRepository authRepository) {
         this.forgetPasswordView = forgetPasswordView;
         this.authRepository = authRepository;
     }
+
     @Override
     public void sendResetEmail(String email) {
-        if (forgetPasswordView != null) {
-            forgetPasswordView.showLoading();
+        if (email.isEmpty()) {
+            forgetPasswordView.onEmailSentError("Email is required");
+            return;
         }
-        authRepository.ResetPassword(email, new AuthNetworkResponse() {
-            @Override
-            public void onSuccess() {
-                forgetPasswordView.hideLoading();
-                forgetPasswordView.onEmailSentSuccess();
-            }
 
-            @Override
-            public void onFailure(String error) {
-                forgetPasswordView.hideLoading();
-                forgetPasswordView.onEmailSentError(error);
-            }
-        });
+        forgetPasswordView.showLoading();
+
+        disposable.add(
+                authRepository.resetPassword(email)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> {
+                                    forgetPasswordView.hideLoading();
+                                    forgetPasswordView.onEmailSentSuccess();
+                                },
+                                throwable -> {
+                                    forgetPasswordView.hideLoading();
+                                    forgetPasswordView.onEmailSentError(throwable.getMessage());
+                                }
+                        )
+        );
+    }
+
+    public void clear() {
+        disposable.clear();
     }
 }

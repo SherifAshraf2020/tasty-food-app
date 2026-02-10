@@ -28,15 +28,12 @@ public class ForgetPasswordFragment extends Fragment implements ForgetPasswordVi
     private TextView tvSubmitMsg;
     private ProgressBar progressBar;
     private Button btnSubmit;
-    private ForgetPasswordPresenter presenter;
-    private AuthRepository authRepository;
+    private ForgetPasswordPresenterImp presenter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        return  inflater.inflate(R.layout.fragment_forget_password, container, false);
-
-
+        return inflater.inflate(R.layout.fragment_forget_password, container, false);
     }
 
     @Override
@@ -46,29 +43,25 @@ public class ForgetPasswordFragment extends Fragment implements ForgetPasswordVi
         etEmail = view.findViewById(R.id.etForgotPasswordEmail);
         tvSubmitMsg = view.findViewById(R.id.tvSubmitMsg);
         progressBar = view.findViewById(R.id.progressBar);
-        btnSubmit = view .findViewById(R.id.btnForgotPasswordSubmit);
+        btnSubmit = view.findViewById(R.id.btnForgotPasswordSubmit);
 
         if (getArguments() != null) {
             String emailFromLogin = getArguments().getString("userEmail");
             etEmail.setText(emailFromLogin);
         }
 
-        presenter = new ForgetPasswordPresenterImp(this,
-                AuthRepository.getInstance(
-                        new AuthRemoteDataSource(),
-                        new SharedPrefsLocalDataSource(requireContext())
-                ));
+        AuthRepository repository = AuthRepository.getInstance(
+                new AuthRemoteDataSource(requireContext()),
+                new SharedPrefsLocalDataSource(requireContext())
+        );
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = etEmail.getText().toString().trim();
-                presenter.sendResetEmail(email);
-            }
+        presenter = new ForgetPasswordPresenterImp(this, repository);
+
+        btnSubmit.setOnClickListener(v -> {
+            String email = etEmail.getText().toString().trim();
+            presenter.sendResetEmail(email);
         });
-
     }
-
 
     @Override
     public void onEmailSentSuccess() {
@@ -94,5 +87,13 @@ public class ForgetPasswordFragment extends Fragment implements ForgetPasswordVi
     public void hideLoading() {
         progressBar.setVisibility(View.GONE);
         btnSubmit.setEnabled(true);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.clear();
+        }
     }
 }

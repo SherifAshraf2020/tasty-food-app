@@ -1,27 +1,50 @@
 package com.example.tasty_food_app.datasource.remote.auth;
 
+import android.content.Context;
+
+import com.example.tasty_food_app.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import io.reactivex.rxjava3.core.Completable;
+
 public class GoogleAuthService {
     private FirebaseAuth mAuth;
+    private final GoogleSignInClient mGoogleSignInClient;
 
-    public GoogleAuthService() {
+    public GoogleAuthService(Context context) {
         mAuth = FirebaseAuth.getInstance();
+
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(context.getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
     }
 
-    public void signInWithGoogle(String idToken, AuthNetworkResponse callback) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        callback.onSuccess();
-                    } else {
-                        String error = task.getException() != null ?
-                                task.getException().getMessage() : "Google Sign-In Failed";
-                        callback.onFailure(error);
-                    }
-                });
+    public Completable signInWithGoogle(String idToken) {
+        return Completable.create(emitter -> {
+            AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+            mAuth.signInWithCredential(credential)
+                    .addOnSuccessListener(authResult -> emitter.onComplete())
+                    .addOnFailureListener(e -> { if (!emitter.isDisposed()) emitter.onError(e); });
+        });
+    }
+
+    public Completable signOut() {
+        return Completable.create(emitter -> {
+            mGoogleSignInClient.signOut().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onComplete();
+                } else {
+                    emitter.onError(task.getException());
+                }
+            });
+        });
     }
 }

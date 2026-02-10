@@ -37,7 +37,7 @@ public class SplashFragment extends Fragment implements SplashView{
         super.onViewCreated(view, savedInstanceState);
 
         AuthRepository authRepository = AuthRepository.getInstance(
-                new AuthRemoteDataSource(),
+                new AuthRemoteDataSource(requireContext()),
                 new SharedPrefsLocalDataSource(requireContext())
         );
         presenter = new SplashPresenterImp(this, authRepository);
@@ -70,7 +70,7 @@ public class SplashFragment extends Fragment implements SplashView{
 
     @Override
     public void navigateToAuth() {
-       NavHostFragment.findNavController(this).navigate(R.id.action_splashFragment_to_auth_graph);
+        NavHostFragment.findNavController(this).navigate(R.id.action_splashFragment_to_auth_graph);
     }
 
     @Override
@@ -81,5 +81,13 @@ public class SplashFragment extends Fragment implements SplashView{
     @Override
     public void navigateToHome() {
         NavHostFragment.findNavController(this).navigate(R.id.action_splashFragment_to_home_nav_graph);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter instanceof SplashPresenterImp) {
+            ((SplashPresenterImp) presenter).clear();
+        }
     }
 }

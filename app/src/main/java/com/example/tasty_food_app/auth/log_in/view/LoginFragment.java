@@ -42,11 +42,11 @@ import com.google.android.material.textfield.TextInputEditText;
 
 
 public class LoginFragment extends Fragment implements LoginView{
-    private LoginPresenter presenter;
+    private LoginPresenterImp presenter;
     private TextInputEditText etEmail, etPassword;
     private Button btnSignIn;
     private CardView btnGoogle;
-    private TextView tvRegister,tvForgetPassword;
+    private TextView tvRegister, tvForgetPassword;
     private ProgressBar progressBar;
 
     @Override
@@ -68,30 +68,22 @@ public class LoginFragment extends Fragment implements LoginView{
 
         presenter = new LoginPresenterImp(this,
                 AuthRepository.getInstance(
-                        new AuthRemoteDataSource(),
+                        new AuthRemoteDataSource(requireContext()),
                         new SharedPrefsLocalDataSource(requireContext())
                 ));
+
         btnSignIn.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
-
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(getContext(), "Please enter email and password", Toast.LENGTH_SHORT).show();
-            } else {
-                presenter.signIn(email, password);
-            }
+            presenter.signIn(email, password);
         });
-
 
         setupGoogleLogin();
 
-
         tvForgetPassword.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
-
             if (email.isEmpty()) {
                 etEmail.setError("Email is required");
-                Toast.makeText(getContext(), "Please enter your email", Toast.LENGTH_SHORT).show();
             } else {
                 Bundle bundle = new Bundle();
                 bundle.putString("userEmail", email);
@@ -104,8 +96,6 @@ public class LoginFragment extends Fragment implements LoginView{
         });
     }
 
-
-
     private void setupGoogleLogin() {
         CredentialManager credentialManager = CredentialManager.create(requireContext());
 
@@ -113,7 +103,7 @@ public class LoginFragment extends Fragment implements LoginView{
             GetGoogleIdOption googleIdOption = new GetGoogleIdOption.Builder()
                     .setFilterByAuthorizedAccounts(false)
                     .setServerClientId(getString(R.string.default_web_client_id))
-                    .setAutoSelectEnabled(true)
+                    .setAutoSelectEnabled(false)
                     .build();
 
             GetCredentialRequest request = new GetCredentialRequest.Builder()
@@ -134,9 +124,7 @@ public class LoginFragment extends Fragment implements LoginView{
                         @Override
                         public void onError(GetCredentialException e) {
                             Log.e("GoogleAuth", "Error: " + e.getMessage());
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(() -> onLoginError("Google Sign-in failed"));
-                            }
+                            requireActivity().runOnUiThread(() -> onLoginError("Google Sign-in cancelled"));
                         }
                     }
             );
@@ -150,38 +138,40 @@ public class LoginFragment extends Fragment implements LoginView{
             try {
                 GoogleIdTokenCredential googleIdToken = GoogleIdTokenCredential.createFrom(credential.getData());
                 String idToken = googleIdToken.getIdToken();
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> presenter.signInWithGoogle(idToken));
-                }
+                String email = googleIdToken.getId();
+                requireActivity().runOnUiThread(() -> presenter.signInWithGoogle(idToken, email));
             } catch (Exception e) {
                 Log.e("GoogleAuth", "Parsing Error", e);
             }
         }
     }
 
-
     @Override
     public void showLoading() {
         btnSignIn.setEnabled(false);
-        btnSignIn.setAlpha(0.5f);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
         btnSignIn.setEnabled(true);
-        btnSignIn.setAlpha(1.0f);
         progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onLoginSuccess() {
-        Toast.makeText(getContext(), "Login Successful", Toast.LENGTH_SHORT).show();
-         Navigation.findNavController(requireView()).navigate(R.id.action_auth_graph_to_home_nav_graph);
+        Toast.makeText(getContext(), "Welcome!", Toast.LENGTH_SHORT).show();
+        Navigation.findNavController(requireView()).navigate(R.id.action_auth_graph_to_home_nav_graph);
     }
 
     @Override
     public void onLoginError(String error) {
         Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.clear();
     }
 }

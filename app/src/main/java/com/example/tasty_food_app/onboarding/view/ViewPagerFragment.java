@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
+import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.example.tasty_food_app.onboarding.presenter.OnBoardingPresenterImp;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 public class ViewPagerFragment extends Fragment implements OnBoardingView{
 
     private ViewPager2 viewPager;
-    OnBoardingPresenterImp onBoardingPresenterImp;
+    private OnBoardingPresenterImp onBoardingPresenterImp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,11 +31,12 @@ public class ViewPagerFragment extends Fragment implements OnBoardingView{
         View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
         viewPager = view.findViewById(R.id.viewPager);
 
+        AuthRepository repository = AuthRepository.getInstance(
+                new AuthRemoteDataSource(requireContext()),
+                new SharedPrefsLocalDataSource(requireContext())
+        );
 
-        SharedPrefsLocalDataSource sharedPrefsLocalDataSource = new SharedPrefsLocalDataSource(requireContext());
-        onBoardingPresenterImp = new OnBoardingPresenterImp(this, sharedPrefsLocalDataSource);
-
-
+        onBoardingPresenterImp = new OnBoardingPresenterImp(this, repository);
         onBoardingPresenterImp.loadOnBoardingData();
 
         return view;
@@ -50,7 +53,7 @@ public class ViewPagerFragment extends Fragment implements OnBoardingView{
 
     @Override
     public void navigateToAuth() {
-         Navigation.findNavController(requireView()).navigate(R.id.action_viewPagerFragment_to_auth_graph);
+        Navigation.findNavController(requireView()).navigate(R.id.action_viewPagerFragment_to_auth_graph);
     }
 
     @Override

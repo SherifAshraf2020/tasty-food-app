@@ -3,6 +3,7 @@ package com.example.tasty_food_app.onboarding.presenter;
 import androidx.fragment.app.Fragment;
 
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.example.tasty_food_app.onboarding.view.OnBoardingView;
 import com.example.tasty_food_app.onboarding.Screens.FirstScreen;
 import com.example.tasty_food_app.onboarding.Screens.SecondScreen;
@@ -13,12 +14,13 @@ import java.util.ArrayList;
 public class OnBoardingPresenterImp implements OnBoardingPresenter{
 
     private final OnBoardingView view;
-    private final SharedPrefsLocalDataSource sharedPrefsLocalDataSource;
+    private final AuthRepository repository;
 
-    public OnBoardingPresenterImp(OnBoardingView view, SharedPrefsLocalDataSource sharedPrefsLocalDataSource) {
+    public OnBoardingPresenterImp(OnBoardingView view, AuthRepository repository) {
         this.view = view;
-        this.sharedPrefsLocalDataSource = sharedPrefsLocalDataSource;
+        this.repository = repository;
     }
+
     @Override
     public void loadOnBoardingData() {
         ArrayList<Fragment> fragmentList = new ArrayList<>();
@@ -31,7 +33,7 @@ public class OnBoardingPresenterImp implements OnBoardingPresenter{
 
     @Override
     public void markOnBoardingFinished() {
-        sharedPrefsLocalDataSource.setOnBoardingFinished(true);
+        repository.setOnBoardingFinished(true);
         view.navigateToAuth();
     }
 
@@ -43,7 +45,7 @@ public class OnBoardingPresenterImp implements OnBoardingPresenter{
 
     @Override
     public void onGetStartedClicked() {
-        sharedPrefsLocalDataSource.setOnBoardingFinished(true);
+        repository.setOnBoardingFinished(true);
         view.navigateToAuth();
     }
 }

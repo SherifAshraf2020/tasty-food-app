@@ -6,16 +6,14 @@ import android.content.SharedPreferences;
 import com.example.tasty_food_app.datasource.model.Meal;
 import com.google.gson.Gson;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 public class SharedPrefsLocalDataSource {
     private static final String PREF_NAME = "tasty-food-prefs";
-
-
     private static final String KEY_ONBOARDING = "is_onboarding_finished";
-
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     private static final String KEY_USER_EMAIL = "user_email";
-
-
     private static final String KEY_DAILY_MEAL_JSON = "daily_meal_json";
     private static final String KEY_DAILY_MEAL_DATE = "daily_meal_date";
 
@@ -24,7 +22,48 @@ public class SharedPrefsLocalDataSource {
 
     public SharedPrefsLocalDataSource(Context context) {
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        this.gson = new Gson();    }
+        this.gson = new Gson();
+    }
+
+
+    public Completable saveUserSession(String email) {
+        return Completable.fromAction(() -> {
+            sharedPreferences.edit()
+                    .putBoolean(KEY_IS_LOGGED_IN, true)
+                    .putString(KEY_USER_EMAIL, email)
+                    .apply();
+        });
+    }
+
+    public Single<Boolean> isLoggedIn() {
+        return Single.just(sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false));
+    }
+
+    public Completable clearSession() {
+        return Completable.fromAction(() -> sharedPreferences.edit().clear().apply());
+    }
+
+
+
+
+
+
+
+    public void setOnBoardingFinished(boolean isFinished) {
+        sharedPreferences.edit().putBoolean(KEY_ONBOARDING, isFinished).apply();
+    }
+
+    public boolean isOnBoardingFinished() {
+        return sharedPreferences.getBoolean(KEY_ONBOARDING, false);
+    }
+
+
+
+
+
+
+
+
 
     public void saveDailyMeal(Meal meal, String date) {
         sharedPreferences.edit()
@@ -32,7 +71,6 @@ public class SharedPrefsLocalDataSource {
                 .putString(KEY_DAILY_MEAL_DATE, date)
                 .apply();
     }
-
 
     public Meal getStoredDailyMeal() {
         String json = sharedPreferences.getString(KEY_DAILY_MEAL_JSON, null);
@@ -48,31 +86,7 @@ public class SharedPrefsLocalDataSource {
 
 
 
-
-
-    public void setOnBoardingFinished(boolean isFinished) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(KEY_ONBOARDING, isFinished);
-        editor.apply();
-    }
-
-    public Boolean isOnBoardingFinished() {
-        return sharedPreferences.getBoolean(KEY_ONBOARDING, false);
-    }
-
-
-    public void saveUserSession(String email) {
-        sharedPreferences.edit()
-                .putBoolean(KEY_IS_LOGGED_IN, true)
-                .putString(KEY_USER_EMAIL, email)
-                .apply();
-    }
-
-    public boolean isLoggedIn() {
-        return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
-    }
-
-    public void clearSession() {
-        sharedPreferences.edit().clear().apply();
+    public String getUserEmail() {
+        return sharedPreferences.getString(KEY_USER_EMAIL, "");
     }
 }
