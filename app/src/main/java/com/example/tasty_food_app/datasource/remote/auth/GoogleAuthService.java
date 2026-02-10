@@ -3,6 +3,7 @@ package com.example.tasty_food_app.datasource.remote.auth;
 import android.content.Context;
 
 import com.example.tasty_food_app.R;
+import com.example.tasty_food_app.datasource.network.FirebaseClient;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -13,12 +14,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import io.reactivex.rxjava3.core.Completable;
 
 public class GoogleAuthService {
-    private FirebaseAuth mAuth;
+    private final FirebaseAuth mAuth;
     private final GoogleSignInClient mGoogleSignInClient;
 
     public GoogleAuthService(Context context) {
-        mAuth = FirebaseAuth.getInstance();
-
+        this.mAuth = FirebaseClient.getInstance().getAuth();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(context.getString(R.string.default_web_client_id))

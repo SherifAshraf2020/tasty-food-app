@@ -1,5 +1,6 @@
 package com.example.tasty_food_app.datasource.remote.auth;
 
+import com.example.tasty_food_app.datasource.network.FirebaseClient;
 import com.google.firebase.auth.FirebaseAuth;
 
 import io.reactivex.rxjava3.core.Completable;
@@ -9,7 +10,7 @@ public class EmailAuthService {
     private final FirebaseAuth mAuth;
 
     public EmailAuthService() {
-        mAuth = FirebaseAuth.getInstance();
+        this.mAuth = FirebaseClient.getInstance().getAuth();
     }
 
     public Completable signUp(String email, String password) {
