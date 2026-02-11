@@ -21,8 +21,11 @@ import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.auth.sign_up.presenter.SignUpPresenter;
 import com.example.tasty_food_app.auth.sign_up.presenter.SignUpPresenterImp;
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreService;
 import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -44,6 +47,9 @@ public class SignUpFragment extends Fragment implements SignUpView{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        FirestoreService firestoreService = new FirestoreService();
+        FirestoreRemoteDataSource firestoreRemoteDataSource = new FirestoreRemoteDataSource(firestoreService);
+
         etName = view.findViewById(R.id.etSinUpName);
         etEmail = view.findViewById(R.id.etSinUpEmail);
         etPassword = view.findViewById(R.id.etSinUpPassword);
@@ -51,12 +57,19 @@ public class SignUpFragment extends Fragment implements SignUpView{
         progressBar = view.findViewById(R.id.progressBar);
         tvLoginPage = view.findViewById(R.id.tvLoginPage);
 
-        AuthRepository repository = AuthRepository.getInstance(
+
+
+        AuthRepository authRepo = AuthRepository.getInstance(
                 new AuthRemoteDataSource(requireContext()),
                 new SharedPrefsLocalDataSource(requireContext())
         );
 
-        presenter = new SignUpPresenterImp(this, repository);
+        MealRepository mealRepo = new MealRepository(
+                requireContext(),
+                firestoreRemoteDataSource
+        );
+
+        presenter = new SignUpPresenterImp(this, authRepo, mealRepo);
 
         btnSignUp.setOnClickListener(v -> {
             String name = etName.getText().toString().trim();

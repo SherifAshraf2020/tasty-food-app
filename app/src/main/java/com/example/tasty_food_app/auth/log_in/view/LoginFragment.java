@@ -27,6 +27,9 @@ import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.GetCredentialException;
 
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreService;
+import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 
@@ -58,6 +61,23 @@ public class LoginFragment extends Fragment implements LoginView{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        initViews(view);
+
+        FirestoreService firestoreService = new FirestoreService();
+        FirestoreRemoteDataSource firestoreRemoteDataSource = new FirestoreRemoteDataSource(firestoreService);
+
+        AuthRemoteDataSource authRemoteDataSource = new AuthRemoteDataSource(requireContext());
+        SharedPrefsLocalDataSource sharedPrefsLocalDataSource = new SharedPrefsLocalDataSource(requireContext());
+
+        AuthRepository authRepo = AuthRepository.getInstance(authRemoteDataSource, sharedPrefsLocalDataSource);
+        MealRepository mealRepo = new MealRepository(requireContext(), firestoreRemoteDataSource);
+
+        presenter = new LoginPresenterImp(this, authRepo, mealRepo);
+
+        setupClickListeners();
+    }
+
+    private void initViews(View view) {
         etEmail = view.findViewById(R.id.etSinInEmail);
         etPassword = view.findViewById(R.id.etSinInPassword);
         btnSignIn = view.findViewById(R.id.btnSignIn);
@@ -65,13 +85,9 @@ public class LoginFragment extends Fragment implements LoginView{
         tvForgetPassword = view.findViewById(R.id.tvForgotPassword);
         btnGoogle = view.findViewById(R.id.btnSignInWithGoogle);
         progressBar = view.findViewById(R.id.progressBar);
+    }
 
-        presenter = new LoginPresenterImp(this,
-                AuthRepository.getInstance(
-                        new AuthRemoteDataSource(requireContext()),
-                        new SharedPrefsLocalDataSource(requireContext())
-                ));
-
+    private void setupClickListeners() {
         btnSignIn.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
@@ -95,6 +111,8 @@ public class LoginFragment extends Fragment implements LoginView{
             Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_signUpFragment);
         });
     }
+
+
 
     private void setupGoogleLogin() {
         CredentialManager credentialManager = CredentialManager.create(requireContext());
