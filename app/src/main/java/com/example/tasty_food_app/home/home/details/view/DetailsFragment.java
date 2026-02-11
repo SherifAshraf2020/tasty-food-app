@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.remote.FirestoreRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreService;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.home.details.presenter.DetailsPresenter;
 import com.example.tasty_food_app.home.home.details.presenter.DetailsPresenterImp;
@@ -50,16 +52,24 @@ public class DetailsFragment extends Fragment implements DetailsView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         initViews(view);
         setupIngredientsRecyclerView();
+
+        FirestoreService firestoreService = new FirestoreService();
+        FirestoreRemoteDataSource firestoreRemoteDataSource = new FirestoreRemoteDataSource(firestoreService);
+
+        MealRepository repository = new MealRepository(
+                requireActivity().getApplicationContext(),
+                firestoreRemoteDataSource
+        );
+
+        presenter = new DetailsPresenterImp(this, repository);
 
         String mealId = "";
         if (getArguments() != null) {
             mealId = getArguments().getString("mealId");
         }
-
-        MealRepository repository = new MealRepository(requireActivity().getApplicationContext());
-        presenter = new DetailsPresenterImp(this, repository);
 
         if (mealId != null && !mealId.isEmpty()) {
             presenter.getMealDetails(mealId);
