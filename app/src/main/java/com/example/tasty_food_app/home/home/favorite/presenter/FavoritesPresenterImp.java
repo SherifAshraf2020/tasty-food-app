@@ -3,6 +3,8 @@ package com.example.tasty_food_app.home.home.favorite.presenter;
 import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.home.favorite.view.FavoritesView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -19,9 +21,13 @@ public class FavoritesPresenterImp implements FavoritesPresenter{
         this.mealRepository = mealRepository;
     }
 
+    private String getCurrentUserId() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return (user != null) ? user.getUid() : null;
+    }
+
     @Override
     public void getFavoriteMeals() {
-
         disposable.add(
                 mealRepository.getStoredMeals()
                         .subscribeOn(Schedulers.io())
@@ -35,22 +41,27 @@ public class FavoritesPresenterImp implements FavoritesPresenter{
 
     @Override
     public void removeMeal(Meal meal) {
+        String uId = getCurrentUserId();
+        if (uId != null) {
+            disposable.add(
+                    mealRepository.deleteMeal(meal, uId)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    () -> favoritesView.showMessage("Removed: " + meal.getStrMeal()),
+                                    throwable -> favoritesView.showError(throwable.getMessage())
+                            )
+            );
+        } else {
 
-        disposable.add(
-                mealRepository.deleteMeal(meal)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                () -> favoritesView.showMessage("Removed: " + meal.getStrMeal()),
-                                throwable -> favoritesView.showError(throwable.getMessage())
-                        )
-        );
+            favoritesView.showError("Please log in to manage cloud favorites");
+        }
     }
 
     @Override
     public void clearResources() {
-
         disposable.clear();
+        favoritesView = null;
     }
 
 

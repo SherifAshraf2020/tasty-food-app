@@ -3,8 +3,12 @@ package com.example.tasty_food_app.home.home.discover.presenter;
 import android.app.Application;
 
 import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.remote.FirestoreRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreService;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.home.discover.view.DiscoverView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -16,14 +20,18 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
     private CompositeDisposable disposable = new CompositeDisposable();
 
     public DiscoverPresenterImp(Application application, DiscoverView discoverView) {
-        mealRepository = new MealRepository(application.getApplicationContext());
+        this.mealRepository = new MealRepository(application.getApplicationContext(), new FirestoreRemoteDataSource(new FirestoreService()));
         this.discoverView = discoverView;
+    }
+
+    private String getCurrentUserId() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return (user != null) ? user.getUid() : null;
     }
 
     @Override
     public void getRandomMeal() {
         discoverView.showLoading();
-
         disposable.add(
                 mealRepository.getDailyRandomMeal()
                         .subscribeOn(Schedulers.io())
@@ -31,7 +39,6 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
                         .subscribe(
                                 meal -> {
                                     discoverView.hideLoading();
-
                                     if (meal != null) {
                                         discoverView.showRandomMeal(meal);
                                     }
@@ -73,37 +80,43 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
 
     @Override
     public void addToFavorites(Meal meal) {
-        disposable.add(
-                mealRepository.insertMeal(meal)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                () -> discoverView.showMessage("Added " + meal.getStrMeal() + " to favorites"),
-                                throwable -> discoverView.showError("Failed to add: " + throwable.getMessage())
-                        )
-        );
+        String uId = getCurrentUserId();
+        if (uId != null) {
+            disposable.add(
+                    mealRepository.insertMeal(meal, uId)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    () -> discoverView.showMessage("Added " + meal.getStrMeal() + " to favorites"),
+                                    throwable -> discoverView.showError("Failed to add: " + throwable.getMessage())
+                            )
+            );
+        } else {
+            discoverView.showError("Please log in to add favorites");
+        }
     }
 
     @Override
     public void deleteMealFromFav(Meal meal) {
-        disposable.add(
-                mealRepository.deleteMeal(meal)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                () -> discoverView.showMessage("Deleted " + meal.getStrMeal() + " from favorites"),
-                                throwable -> discoverView.showError("Failed to delete: " + throwable.getMessage())
-                        )
-        );
+        String uId = getCurrentUserId();
+        if (uId != null) {
+            disposable.add(
+                    mealRepository.deleteMeal(meal, uId)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    () -> discoverView.showMessage("Deleted " + meal.getStrMeal() + " from favorites"),
+                                    throwable -> discoverView.showError("Failed to delete: " + throwable.getMessage())
+                            )
+            );
+        }
     }
-
 
     @Override
     public void clearResources() {
         disposable.clear();
+        discoverView = null;
     }
-
-
 
 
 }

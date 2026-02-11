@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.model.Meal;
 
+import com.example.tasty_food_app.datasource.remote.FirestoreRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreService;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.home.favorite.presenter.FavoritesPresenter;
 import com.example.tasty_food_app.home.home.favorite.presenter.FavoritesPresenterImp;
@@ -39,15 +41,20 @@ public class FavoritesFragment extends Fragment implements FavoritesView, OnFavo
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         rvFavorites = view.findViewById(R.id.rv_favorites);
-
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-        rvFavorites.setLayoutManager(gridLayoutManager);
-
+        rvFavorites.setLayoutManager(new GridLayoutManager(getContext(), 2));
         favoritesAdapter = new FavoritesAdapter(new ArrayList<>(), this);
         rvFavorites.setAdapter(favoritesAdapter);
 
-        MealRepository repository = new MealRepository(requireActivity().getApplicationContext());
+        FirestoreService firestoreService = new FirestoreService();
+        FirestoreRemoteDataSource firestoreRemoteDataSource = new FirestoreRemoteDataSource(firestoreService);
+
+        MealRepository repository = new MealRepository(
+                requireActivity().getApplicationContext(),
+                firestoreRemoteDataSource
+        );
+
         presenter = new FavoritesPresenterImp(this, repository);
 
         presenter.getFavoriteMeals();
