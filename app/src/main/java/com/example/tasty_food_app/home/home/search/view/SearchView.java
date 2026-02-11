@@ -18,6 +18,7 @@ public interface SearchView {
 
 
     void showError(String message);
+    void showMessage(String message);
     void showLoading();
     void hideLoading();
 

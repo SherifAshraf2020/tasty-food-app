@@ -3,6 +3,8 @@ package com.example.tasty_food_app.home.home.search.presenter;
 import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.home.search.view.SearchView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,10 @@ public class SearchPresenterImp implements SearchPresenter {
         initSearchProcessor();
     }
 
+    private String getCurrentUserId() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return (user != null) ? user.getUid() : null;
+    }
 
     @Override
     public void checkFavoritesAndShow(List<Meal> apiMeals) {
@@ -39,7 +45,7 @@ public class SearchPresenterImp implements SearchPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(favMeals -> {
                     for (Meal apiMeal : apiMeals) {
-                        apiMeal.setFavorite(false); // ريسيت
+                        apiMeal.setFavorite(false);
                         for (Meal fav : favMeals) {
                             if (apiMeal.getIdMeal().equals(fav.getIdMeal())) {
                                 apiMeal.setFavorite(true);
@@ -80,48 +86,57 @@ public class SearchPresenterImp implements SearchPresenter {
 
     @Override
     public void addToPlan(Meal meal, String day, String userId) {
-        com.example.tasty_food_app.datasource.model.PlanMeal planMeal =
-                new com.example.tasty_food_app.datasource.model.PlanMeal(
-                        meal.getIdMeal(),
-                        meal.getStrMeal(),
-                        meal.getStrMealThumb(),
-                        day,
-                        userId
-                );
+        String uId = getCurrentUserId();
+        if (uId != null) {
+            com.example.tasty_food_app.datasource.model.PlanMeal planMeal =
+                    new com.example.tasty_food_app.datasource.model.PlanMeal(
+                            meal.getIdMeal(),
+                            meal.getStrMeal(),
+                            meal.getStrMealThumb(),
+                            day,
+                            uId
+                    );
 
-        disposable.add(mealRepository.insertPlanMeal(planMeal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> { },
-                        throwable -> searchView.showError(throwable.getMessage())
-                ));
+            disposable.add(mealRepository.insertPlanMeal(planMeal, uId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            () -> searchView.showMessage("Added to your " + day + " plan"),
+                            throwable -> searchView.showError(throwable.getMessage())
+                    ));
+        } else {
+            searchView.showError("Please log in to use Meal Plan");
+        }
     }
 
     @Override
     public void addToFavorite(Meal meal) {
-        disposable.add(mealRepository.insertMeal(meal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> {
-                            meal.setFavorite(true);
-                        },
-                        throwable -> searchView.showError(throwable.getMessage())
-                ));
+        String uId = getCurrentUserId();
+        if (uId != null) {
+            disposable.add(mealRepository.insertMeal(meal, uId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            () -> meal.setFavorite(true),
+                            throwable -> searchView.showError(throwable.getMessage())
+                    ));
+        } else {
+            searchView.showError("Please log in to add favorites");
+        }
     }
 
     @Override
     public void removeFromFavorite(Meal meal) {
-        disposable.add(mealRepository.deleteMeal(meal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> {
-                            meal.setFavorite(false);
-                        },
-                        throwable -> searchView.showError(throwable.getMessage())
-                ));
+        String uId = getCurrentUserId();
+        if (uId != null) {
+            disposable.add(mealRepository.deleteMeal(meal, uId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            () -> meal.setFavorite(false),
+                            throwable -> searchView.showError(throwable.getMessage())
+                    ));
+        }
     }
 
     @Override
@@ -251,5 +266,6 @@ public class SearchPresenterImp implements SearchPresenter {
     @Override
     public void clearResources() {
         disposable.clear();
+        searchView = null;
     }
 }

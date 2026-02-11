@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.model.RecentMeal;
+import com.example.tasty_food_app.datasource.remote.FirestoreRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreService;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.home.recently.presenter.RecentlyPresenter;
 import com.example.tasty_food_app.home.home.recently.presenter.RecentlyPresenterImp;
@@ -43,11 +45,19 @@ public class RecentlyFragment extends Fragment implements RecentlyView, Recently
 
         recyclerView = view.findViewById(R.id.rv_recently);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-
         recentlyAdapter = new RecentlyAdapter(new ArrayList<>(), this);
         recyclerView.setAdapter(recentlyAdapter);
 
-        recentlyPresenter = new RecentlyPresenterImp(this, new MealRepository(requireContext()));
+        FirestoreService firestoreService = new FirestoreService();
+        FirestoreRemoteDataSource firestoreRemoteDataSource = new FirestoreRemoteDataSource(firestoreService);
+
+        MealRepository repository = new MealRepository(
+                requireContext(),
+                firestoreRemoteDataSource
+        );
+
+        recentlyPresenter = new RecentlyPresenterImp(this, repository);
+
         recentlyPresenter.getRecentMeals();
     }
 

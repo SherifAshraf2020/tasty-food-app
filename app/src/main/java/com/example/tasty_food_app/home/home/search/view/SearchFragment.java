@@ -25,12 +25,15 @@ import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.model.area.Area;
 import com.example.tasty_food_app.datasource.model.category.Category;
 import com.example.tasty_food_app.datasource.model.ingredient.Ingredient;
+import com.example.tasty_food_app.datasource.remote.FirestoreRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreService;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 
 import com.example.tasty_food_app.home.home.details.view.DetailsFragment;
 import com.example.tasty_food_app.home.home.search.presenter.SearchPresenter;
 import com.example.tasty_food_app.home.home.search.presenter.SearchPresenterImp;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +43,6 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
     private final List<?> EMPTY_LIST = new ArrayList<>(0);
     private String selectedDay = null;
     private String userId = "";
-
-
 
     private EditText etSearch;
     private ChipGroup chipGroupMain;
@@ -69,10 +70,9 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
             selectedDay = getArguments().getString("selected_day");
         }
 
-        if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() != null) {
-            userId = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
-
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new androidx.activity.OnBackPressedCallback(true) {
             @Override
@@ -87,12 +87,15 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
         });
 
         initViews(view);
-        MealRepository mealRepository = new MealRepository(requireContext());
+
+        FirestoreService firestoreService = new FirestoreService();
+        FirestoreRemoteDataSource firestoreRemoteDataSource = new FirestoreRemoteDataSource(firestoreService);
+        MealRepository mealRepository = new MealRepository(requireContext(), firestoreRemoteDataSource);
+
         presenter = new SearchPresenterImp(this, mealRepository);
 
         setupAdapters();
         setupListeners();
-
         showOnly(null);
     }
 
@@ -108,34 +111,26 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
 
         rvCategory.setLayoutManager(new LinearLayoutManager(getContext()));
         rvSuggestions.setLayoutManager(new LinearLayoutManager(getContext()));
-
         rvFiltersCircular.setLayoutManager(new GridLayoutManager(getContext(), 3));
-
         rvMeals.setLayoutManager(new GridLayoutManager(getContext(), 2));
     }
-
 
     private void setupAdapters() {
         categoryAdapter = new CategoryAdapter(this);
         rvCategory.setAdapter(categoryAdapter);
-
         filterAdapter = new FilterAdapter(this);
         rvFiltersCircular.setAdapter(filterAdapter);
-
         mealAdapter = new MealAdapter(this);
         rvMeals.setAdapter(mealAdapter);
-
         suggestionAdapter = new SuggestionAdapter(this);
         rvSuggestions.setAdapter(suggestionAdapter);
     }
 
     private void setupListeners() {
-
         chipGroupMain.setOnCheckedChangeListener((group, checkedId) -> {
             etSearch.setText("");
             etSearch.clearFocus();
             clearAllAdapters();
-
             if (checkedId == R.id.chipCategory) {
                 presenter.getCategories();
             } else if (checkedId == R.id.chipIngredient) {
@@ -149,11 +144,9 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String query = s.toString().trim();
                 int checkedId = chipGroupMain.getCheckedChipId();
-
                 if (query.length() > 0) {
                     if (checkedId == R.id.chipCategory) {
                         categoryAdapter.filter(query);
@@ -163,36 +156,27 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
                         presenter.searchMeals(query);
                     }
                 } else {
-
                     handleEmptySearch(checkedId);
                 }
             }
-
             @Override public void afterTextChanged(Editable s) {}
         });
     }
-
-
 
     private void showOnly(RecyclerView visibleRecycler) {
         rvCategory.setVisibility(View.GONE);
         rvFiltersCircular.setVisibility(View.GONE);
         rvMeals.setVisibility(View.GONE);
         cardSuggestions.setVisibility(View.GONE);
-
         if (visibleRecycler != null) {
             visibleRecycler.setVisibility(View.VISIBLE);
         }
     }
 
-
-
     private void handleEmptySearch(int checkedId) {
         cardSuggestions.setVisibility(View.GONE);
-
         suggestionAdapter.setList(new ArrayList<>());
         mealAdapter.setList(new ArrayList<>());
-
         if (checkedId == R.id.chipCategory) {
             showOnly(rvCategory);
             presenter.getCategories();
@@ -205,27 +189,20 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
         }
     }
 
-
     private void clearAllAdapters() {
         categoryAdapter.setList((List<Category>) EMPTY_LIST);
         filterAdapter.setList((List<Object>) EMPTY_LIST);
         mealAdapter.setList((List<Meal>) EMPTY_LIST);
         suggestionAdapter.setList((List<Meal>) EMPTY_LIST);
-
         cardSuggestions.setVisibility(View.GONE);
     }
-
-
 
     private void navigateToDetails(String mealId) {
         if (mealId != null && !mealId.isEmpty()) {
             DetailsFragment detailsFragment = new DetailsFragment();
-
             Bundle bundle = new Bundle();
             bundle.putString("mealId", mealId);
             detailsFragment.setArguments(bundle);
-
-
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainerView, detailsFragment)
                     .addToBackStack(null)
@@ -234,10 +211,6 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
             Toast.makeText(getContext(), "Meal ID not found", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
-
 
     @Override
     public void showCategories(List<Category> categories) {
@@ -261,31 +234,21 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
     public void showMealsResult(List<Meal> meals) {
         String query = etSearch.getText().toString().trim();
         int checkedChipId = chipGroupMain.getCheckedChipId();
-
-
         if (checkedChipId == View.NO_ID) {
-
             if (query.isEmpty() || meals == null || meals.isEmpty()) {
                 cardSuggestions.setVisibility(View.GONE);
                 suggestionAdapter.setList(new ArrayList<>());
                 return;
             }
-
-
             showOnly(null);
             cardSuggestions.setVisibility(View.VISIBLE);
             suggestionAdapter.setList(meals);
-        }
-
-        else {
-
+        } else {
             cardSuggestions.setVisibility(View.GONE);
             showOnly(rvMeals);
             mealAdapter.setList(meals);
         }
     }
-
-
 
     @Override
     public void showLoading() {
@@ -303,14 +266,16 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
     }
 
     @Override
+    public void showMessage(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void showEmptyResult() {
         showOnly(null);
         cardSuggestions.setVisibility(View.GONE);
         Toast.makeText(getContext(), "No results found", Toast.LENGTH_SHORT).show();
     }
-
-
-
 
     @Override
     public void onCategoryClick(Category category) {
@@ -330,13 +295,8 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
     @Override
     public void onMealClick(Meal meal) {
         if (selectedDay != null && !selectedDay.isEmpty() && !selectedDay.equalsIgnoreCase("none")) {
-
             presenter.addToPlan(meal, selectedDay, userId);
-
-            Toast.makeText(getContext(), "Added to " + selectedDay, Toast.LENGTH_SHORT).show();
-
             androidx.navigation.Navigation.findNavController(requireView()).popBackStack();
-
         } else {
             navigateToDetails(meal.getIdMeal());
         }
@@ -345,16 +305,10 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
     @Override
     public void onFavoriteClick(Meal meal) {
         if (meal == null) return;
-
         boolean wasFavorite = meal.isFavorite();
         meal.setFavorite(!wasFavorite);
-
-        if (mealAdapter != null) {
-            mealAdapter.notifyDataSetChanged();
-        }
-        if (suggestionAdapter != null) {
-            suggestionAdapter.notifyDataSetChanged();
-        }
+        if (mealAdapter != null) mealAdapter.notifyDataSetChanged();
+        if (suggestionAdapter != null) suggestionAdapter.notifyDataSetChanged();
 
         if (wasFavorite) {
             presenter.removeFromFavorite(meal);
