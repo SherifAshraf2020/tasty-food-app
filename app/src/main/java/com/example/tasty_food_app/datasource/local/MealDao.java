@@ -41,4 +41,20 @@ public interface MealDao {
 
     @Query("DELETE FROM recent_meals_table")
     Completable clearAllRecent();
+
+
+
+
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Completable insertAllMeals(List<Meal> meals);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Completable insertAllRecent(List<RecentMeal> recentMeals);
+
+    @Query("DELETE FROM meals_table")
+    Completable clearAllFavorites();
+
+
 }

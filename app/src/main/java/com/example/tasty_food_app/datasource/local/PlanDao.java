@@ -26,4 +26,14 @@ public interface PlanDao {
 
     @Query("SELECT * FROM plan_table WHERE userId = :userId")
     Observable<List<PlanMeal>> getAllPlannedMeals(String userId);
+
+
+
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Completable insertAllPlans(List<PlanMeal> plans);
+
+    @Query("DELETE FROM plan_table")
+    Completable clearAllPlans();
 }
