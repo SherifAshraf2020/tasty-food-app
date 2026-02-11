@@ -30,13 +30,18 @@ public class MealPlanPresenterImp implements MealPlanPresenter {
 
     @Override
     public void getWeeklyPlan(String userId) {
+        if (userId == null) return;
         disposable.add(
                 repository.getAllPlannedMeals(userId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                planMeals -> view.showPlanData(planMeals),
-                                throwable -> view.onError(throwable.getMessage())
+                                planMeals -> {
+                                    if (view != null) view.showPlanData(planMeals);
+                                },
+                                throwable -> {
+                                    if (view != null) view.onError(throwable.getMessage());
+                                }
                         )
         );
     }
@@ -50,11 +55,15 @@ public class MealPlanPresenterImp implements MealPlanPresenter {
             days.add(sdf.format(calendar.getTime()));
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
-        view.showDaysList(days);
+        if (view != null) view.showDaysList(days);
     }
 
     @Override
     public void addSingleMealToPlan(Meal meal, String day, String userId) {
+        if (userId == null) {
+            if (view != null) view.onError("Please login first");
+            return;
+        }
         PlanMeal planMeal = new PlanMeal(
                 meal.getIdMeal(),
                 meal.getStrMeal(),
@@ -63,18 +72,23 @@ public class MealPlanPresenterImp implements MealPlanPresenter {
                 userId
         );
         disposable.add(
-                repository.insertPlanMeal(planMeal)
+                repository.insertPlanMeal(planMeal, userId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> view.onInsertSuccess(),
-                                throwable -> view.onError(throwable.getMessage())
+                                () -> {
+                                    if (view != null) view.onInsertSuccess();
+                                },
+                                throwable -> {
+                                    if (view != null) view.onError(throwable.getMessage());
+                                }
                         )
         );
     }
 
     @Override
     public void generateRandomWeeklyPlan(List<String> days, String userId) {
+        if (userId == null) return;
         disposable.add(
                 repository.getAllPlannedMeals(userId)
                         .firstElement()
@@ -99,24 +113,33 @@ public class MealPlanPresenterImp implements MealPlanPresenter {
                                         day,
                                         userId
                                 )))
-                        .concatMapCompletable(planMeal -> repository.insertPlanMeal(planMeal))
+                        .concatMapCompletable(planMeal -> repository.insertPlanMeal(planMeal, userId)) // تم إضافة userId هنا
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> view.onPlanGenerated(),
-                                throwable -> view.onError(throwable.getMessage())
+                                () -> {
+                                    if (view != null) view.onPlanGenerated();
+                                },
+                                throwable -> {
+                                    if (view != null) view.onError(throwable.getMessage());
+                                }
                         )
         );
     }
 
     @Override
     public void removeMealFromPlan(PlanMeal planMeal) {
+        if (planMeal == null || planMeal.getUserId() == null) return;
         disposable.add(
-                repository.deletePlanMeal(planMeal)
+                repository.deletePlanMeal(planMeal, planMeal.getUserId())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> view.onDeleteSuccess(),
-                                throwable -> view.onError(throwable.getMessage())
+                                () -> {
+                                    if (view != null) view.onDeleteSuccess();
+                                },
+                                throwable -> {
+                                    if (view != null) view.onError(throwable.getMessage());
+                                }
                         )
         );
     }
@@ -124,5 +147,6 @@ public class MealPlanPresenterImp implements MealPlanPresenter {
     @Override
     public void onDestroy() {
         disposable.clear();
+        view = null;
     }
 }

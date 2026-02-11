@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.model.PlanMeal;
+import com.example.tasty_food_app.datasource.remote.FirestoreRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreService;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.mealplan.presenter.MealPlanPresenter;
 import com.example.tasty_food_app.home.mealplan.presenter.MealPlanPresenterImp;
@@ -45,21 +47,28 @@ public class MealPlanFragment extends Fragment implements MealPlanView , OnPlanC
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        recyclerView = view.findViewById(R.id.rvWeeklyPlan);
+        btnGenerateRandom = view.findViewById(R.id.btnGenerateRandomPlan);
+
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
 
-        recyclerView = view.findViewById(R.id.rvWeeklyPlan);
-        btnGenerateRandom = view.findViewById(R.id.btnGenerateRandomPlan);
+        FirestoreService firestoreService = new FirestoreService();
+        FirestoreRemoteDataSource firestoreRemoteDataSource = new FirestoreRemoteDataSource(firestoreService);
 
-        presenter = new MealPlanPresenterImp(this, new MealRepository(getContext()));
+        MealRepository repository = new MealRepository(
+                requireContext(),
+                firestoreRemoteDataSource
+        );
+
+        presenter = new MealPlanPresenterImp(this, repository);
+
         adapter = new PlanAdapter(this);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
         presenter.generateDaysList();
-
         btnGenerateRandom.setOnClickListener(v -> onGenerateRandomClick());
     }
 
