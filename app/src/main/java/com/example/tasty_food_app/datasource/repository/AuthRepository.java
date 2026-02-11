@@ -39,8 +39,9 @@ public class AuthRepository {
     }
 
     public Completable logout() {
-        return authRemoteDataSource.signOut()
-                .andThen(sharedPrefsLocalDataSource.clearSession())
+        return sharedPrefsLocalDataSource.clearSession()
+                .andThen(authRemoteDataSource.signOut())
+                .onErrorComplete()
                 .subscribeOn(Schedulers.io());
     }
 
