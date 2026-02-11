@@ -78,4 +78,31 @@ public class MealLocalDataSource {
         return planDao.getAllPlannedMeals(userId);
     }
 
+
+
+
+
+
+
+
+
+    public Completable insertAllMeals(List<Meal> meals) {
+        return mealDao.insertAllMeals(meals);
+    }
+
+    public Completable insertAllPlans(List<PlanMeal> plans) {
+        return planDao.insertAllPlans(plans);
+    }
+
+    public Completable insertAllRecent(List<RecentMeal> recentMeals) {
+        return mealDao.insertAllRecent(recentMeals);
+    }
+
+    public Completable clearAllData() {
+        return Completable.mergeArray(
+                mealDao.clearAllFavorites(),
+                mealDao.clearAllRecent(),
+                planDao.clearAllPlans()
+        );
+    }
 }
