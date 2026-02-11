@@ -15,8 +15,11 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.tasty_food_app.MainActivity;
 import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreService;
 import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
 import com.example.tasty_food_app.datasource.repository.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.splash.presenter.SplashPresenter;
 import com.example.tasty_food_app.splash.presenter.SplashPresenterImp;
 
@@ -40,7 +43,17 @@ public class SplashFragment extends Fragment implements SplashView{
                 new AuthRemoteDataSource(requireContext()),
                 new SharedPrefsLocalDataSource(requireContext())
         );
-        presenter = new SplashPresenterImp(this, authRepository);
+
+        FirestoreService firestoreService = new FirestoreService();
+
+        FirestoreRemoteDataSource firestoreRemoteDataSource = new FirestoreRemoteDataSource(firestoreService);
+
+        MealRepository mealRepository = new MealRepository(
+                requireContext(),
+                firestoreRemoteDataSource
+        );
+
+        presenter = new SplashPresenterImp(this, authRepository, mealRepository);
 
         LottieAnimationView lottie = view.findViewById(R.id.lottie);
         lottie.playAnimation();
