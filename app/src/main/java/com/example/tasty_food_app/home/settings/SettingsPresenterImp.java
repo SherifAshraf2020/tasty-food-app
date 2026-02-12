@@ -31,4 +31,10 @@ public class SettingsPresenterImp implements SettingsPresenter {
     public void clearResources() {
         disposable.clear();
     }
+
+    @Override
+    public void loadUserData() {
+        String email = authRepository.getCurrentUserEmail();
+        settingsView.displayUserEmail(email);
+    }
 }

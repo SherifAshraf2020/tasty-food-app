@@ -82,4 +82,10 @@ public class AuthRepository {
         }
         return null;
     }
+    public String getCurrentUserEmail() {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            return FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        }
+        return "Guest";
+    }
 }

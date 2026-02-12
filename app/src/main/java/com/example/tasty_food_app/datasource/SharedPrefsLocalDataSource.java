@@ -40,8 +40,13 @@ public class SharedPrefsLocalDataSource {
     }
 
     public Completable clearSession() {
-        return Completable.fromAction(() -> sharedPreferences.edit().clear().apply());
-    }
+        return Completable.fromAction(() -> {
+            boolean onBoardingFinished = sharedPreferences.getBoolean(KEY_ONBOARDING, false);
+
+            sharedPreferences.edit().clear().commit();
+
+            sharedPreferences.edit().putBoolean(KEY_ONBOARDING, onBoardingFinished).apply();
+        });    }
 
 
 

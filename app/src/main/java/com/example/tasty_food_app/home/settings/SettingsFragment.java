@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
@@ -25,6 +26,7 @@ public class SettingsFragment extends Fragment implements SettingsView{
 
     private SettingsPresenter presenter;
     private Button btnLogout;
+    private TextView tvUserEmail;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +39,7 @@ public class SettingsFragment extends Fragment implements SettingsView{
         super.onViewCreated(view, savedInstanceState);
 
         btnLogout = view.findViewById(R.id.btn_logout);
+        tvUserEmail = view.findViewById(R.id.tv_user_email);
 
         AuthRepository authRepository = AuthRepository.getInstance(
                 new AuthRemoteDataSource(requireContext()),
@@ -44,6 +47,8 @@ public class SettingsFragment extends Fragment implements SettingsView{
         );
 
         presenter = new SettingsPresenterImp(this, authRepository);
+
+        presenter.loadUserData();
 
         btnLogout.setOnClickListener(v -> presenter.logout());
     }
@@ -59,6 +64,13 @@ public class SettingsFragment extends Fragment implements SettingsView{
     @Override
     public void showError(String message) {
         Toast.makeText(getContext(), "Error: " + message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void displayUserEmail(String email) {
+        if (tvUserEmail != null) {
+            tvUserEmail.setText(email != null ? email : "Guest User");
+        }
     }
 
     @Override
