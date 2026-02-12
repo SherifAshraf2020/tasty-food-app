@@ -87,4 +87,12 @@
         android:id="@+id/action_global_detailsFragment"
         app:destination="@id/detailsFragment" />
 
+    <action
+        android:id="@+id/action_global_to_auth_graph"
+        app:destination="@id/auth_graph"
+        app:popUpTo="@id/my_nav"
+        app:popUpToInclusive="true"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim" />
+
 </navigation>
