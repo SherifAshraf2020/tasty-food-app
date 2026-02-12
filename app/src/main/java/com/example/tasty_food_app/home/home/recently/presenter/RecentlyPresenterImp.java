@@ -20,7 +20,7 @@ public class RecentlyPresenterImp implements RecentlyPresenter{
     @Override
     public void getRecentMeals() {
         disposables.add(
-                mealRepository.getRecentlyViewedMeals() // الميثود اللي بترجع Observable<List<RecentMeal>>
+                mealRepository.getRecentlyViewedMeals()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -41,6 +41,5 @@ public class RecentlyPresenterImp implements RecentlyPresenter{
     @Override
     public void clearResources() {
         disposables.clear();
-        recentlyView = null; // تجنباً للـ Memory Leak
     }
 }

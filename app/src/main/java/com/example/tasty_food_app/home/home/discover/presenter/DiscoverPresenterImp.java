@@ -2,7 +2,10 @@ package com.example.tasty_food_app.home.home.discover.presenter;
 
 import android.app.Application;
 
+import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
+import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.home.discover.view.DiscoverView;
 
@@ -13,17 +16,21 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class DiscoverPresenterImp implements DiscoverPresenter{
     private DiscoverView discoverView;
     private MealRepository mealRepository;
+    private AuthRepository authRepository;
     private CompositeDisposable disposable = new CompositeDisposable();
 
     public DiscoverPresenterImp(Application application, DiscoverView discoverView) {
-        mealRepository = new MealRepository(application.getApplicationContext());
         this.discoverView = discoverView;
+        this.mealRepository = new MealRepository(application.getApplicationContext());
+        this.authRepository = AuthRepository.getInstance(
+                new AuthRemoteDataSource(application.getApplicationContext()),
+                new SharedPrefsLocalDataSource(application.getApplicationContext())
+        );
     }
 
     @Override
     public void getRandomMeal() {
         discoverView.showLoading();
-
         disposable.add(
                 mealRepository.getDailyRandomMeal()
                         .subscribeOn(Schedulers.io())
@@ -31,10 +38,7 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
                         .subscribe(
                                 meal -> {
                                     discoverView.hideLoading();
-
-                                    if (meal != null) {
-                                        discoverView.showRandomMeal(meal);
-                                    }
+                                    if (meal != null) discoverView.showRandomMeal(meal);
                                 },
                                 throwable -> {
                                     discoverView.hideLoading();
@@ -62,9 +66,7 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 meals -> {
-                                    if (meals != null) {
-                                        discoverView.showMealsByLetter(meals);
-                                    }
+                                    if (meals != null) discoverView.showMealsByLetter(meals);
                                 },
                                 throwable -> discoverView.showError(throwable.getMessage())
                         )
@@ -73,8 +75,9 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
 
     @Override
     public void addToFavorites(Meal meal) {
+        String uId = authRepository.getCurrentUserId();
         disposable.add(
-                mealRepository.insertMeal(meal)
+                mealRepository.insertMeal(meal, uId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -86,8 +89,9 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
 
     @Override
     public void deleteMealFromFav(Meal meal) {
+        String uId = authRepository.getCurrentUserId();
         disposable.add(
-                mealRepository.deleteMeal(meal)
+                mealRepository.deleteMeal(meal, uId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -96,7 +100,6 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
                         )
         );
     }
-
 
     @Override
     public void clearResources() {

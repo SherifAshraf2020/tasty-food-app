@@ -14,7 +14,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
+import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.model.PlanMeal;
+import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
+import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.mealplan.presenter.MealPlanPresenter;
 import com.example.tasty_food_app.home.mealplan.presenter.MealPlanPresenterImp;
@@ -45,14 +48,20 @@ public class MealPlanFragment extends Fragment implements MealPlanView , OnPlanC
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        }
+        MealRepository mealRepo = new MealRepository(requireContext());
+
+        AuthRepository authRepo = AuthRepository.getInstance(
+                new AuthRemoteDataSource(requireContext()),
+                new SharedPrefsLocalDataSource(requireContext())
+        );
+
+        userId = authRepo.getCurrentUserId();
+        presenter = new MealPlanPresenterImp(this, mealRepo, authRepo);
+
 
         recyclerView = view.findViewById(R.id.rvWeeklyPlan);
         btnGenerateRandom = view.findViewById(R.id.btnGenerateRandomPlan);
 
-        presenter = new MealPlanPresenterImp(this, new MealRepository(getContext()));
         adapter = new PlanAdapter(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

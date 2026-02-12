@@ -12,19 +12,24 @@ import com.example.tasty_food_app.datasource.model.RecentMeal;
 import com.example.tasty_food_app.datasource.model.area.AreaResponse;
 import com.example.tasty_food_app.datasource.model.category.CategoryResponse;
 import com.example.tasty_food_app.datasource.model.ingredient.IngredientResponse;
+import com.example.tasty_food_app.datasource.remote.FirestoreRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.FirestoreService;
 import com.example.tasty_food_app.datasource.remote.meal.MealRemoteDataSource;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MealRepository {
     MealRemoteDataSource mealRemoteDataSource;
     MealLocalDataSource mealLocalDataSource;
     SharedPrefsLocalDataSource sharedPrefsDataSource;
+    private final FirestoreRemoteDataSource firestoreRemoteDataSource;
 
 
     public MealRepository(Context context) {
@@ -32,6 +37,8 @@ public class MealRepository {
         mealRemoteDataSource = new MealRemoteDataSource();
         mealLocalDataSource = new MealLocalDataSource(context);
         sharedPrefsDataSource = new SharedPrefsLocalDataSource(context);
+
+        firestoreRemoteDataSource = new FirestoreRemoteDataSource(new FirestoreService());
     }
 
     public Single<Meal> getDailyRandomMeal() {
@@ -61,12 +68,20 @@ public class MealRepository {
 
 
 
-    public Completable insertMeal(Meal meal) {
-        return mealLocalDataSource.insertMeal(meal);
+    public Completable insertMeal(Meal meal, String uId) {
+        Completable local = mealLocalDataSource.insertMeal(meal);
+        if (uId != null && !uId.isEmpty()) {
+            return local.andThen(firestoreRemoteDataSource.uploadFavorite(uId, meal)).subscribeOn(Schedulers.io());
+        }
+        return local.subscribeOn(Schedulers.io());
     }
 
-    public Completable deleteMeal(Meal meal) {
-        return mealLocalDataSource.deleteMeal(meal);
+    public Completable deleteMeal(Meal meal, String uId) {
+        Completable local = mealLocalDataSource.deleteMeal(meal);
+        if (uId != null && !uId.isEmpty()) {
+            return local.andThen(firestoreRemoteDataSource.deleteFromFirestore(uId, "favorites", meal.idMeal)).subscribeOn(Schedulers.io());
+        }
+        return local.subscribeOn(Schedulers.io());
     }
 
     public Flowable<List<Meal>> getStoredMeals() {
@@ -82,14 +97,13 @@ public class MealRepository {
 
 
 
-    public Completable insertRecentlyViewed(Meal meal) {
-        RecentMeal recent = new RecentMeal(
-                meal.getIdMeal(),
-                meal.getStrMeal(),
-                meal.getStrMealThumb(),
-                System.currentTimeMillis()
-        );
-        return mealLocalDataSource.insertRecentlyViewed(recent);
+    public Completable insertRecentlyViewed(Meal meal, String uId) {
+        RecentMeal recent = new RecentMeal(meal.getIdMeal(), meal.getStrMeal(), meal.getStrMealThumb(), System.currentTimeMillis());
+        Completable local = mealLocalDataSource.insertRecentlyViewed(recent);
+        if (uId != null && !uId.isEmpty()) {
+            return local.andThen(firestoreRemoteDataSource.uploadRecent(uId, recent)).subscribeOn(Schedulers.io());
+        }
+        return local.subscribeOn(Schedulers.io());
     }
 
     public Observable<List<RecentMeal>> getRecentlyViewedMeals() {
@@ -138,12 +152,21 @@ public class MealRepository {
 
 
 
-    public Completable insertPlanMeal(PlanMeal planMeal){
-        return mealLocalDataSource.insertPlanMeal(planMeal);
+    public Completable insertPlanMeal(PlanMeal planMeal, String uId) {
+        Completable local = mealLocalDataSource.insertPlanMeal(planMeal);
+        if (uId != null && !uId.isEmpty()) {
+            return local.andThen(firestoreRemoteDataSource.uploadPlanMeal(uId, planMeal)).subscribeOn(Schedulers.io());
+        }
+        return local.subscribeOn(Schedulers.io());
     }
 
-    public Completable deletePlanMeal(PlanMeal planMeal){
-        return mealLocalDataSource.deletePlanMeal(planMeal);
+    public Completable deletePlanMeal(PlanMeal planMeal, String uId) {
+        Completable local = mealLocalDataSource.deletePlanMeal(planMeal);
+        if (uId != null && !uId.isEmpty()) {
+            String docId = planMeal.getIdMeal() + "_" + planMeal.getDay();
+            return local.andThen(firestoreRemoteDataSource.deleteFromFirestore(uId, "plan", docId)).subscribeOn(Schedulers.io());
+        }
+        return local.subscribeOn(Schedulers.io());
     }
 
     public Observable<List<PlanMeal>> getPlanMealsByDay(String userId, String day) {
@@ -159,5 +182,58 @@ public class MealRepository {
     public Single<Meal> getRandomMealForPlan() {
         return mealRemoteDataSource.getRandomMeal()
                 .map(response -> response.getMeals().get(0)); //random meal for plan
+    }
+
+
+
+
+
+
+
+
+
+    public Completable syncAllDataFromCloud(String uId) {
+        return Completable.mergeArray(
+                syncFavorites(uId),
+                syncPlan(uId),
+                syncRecent(uId)
+        ).subscribeOn(Schedulers.io());
+    }
+
+    private Completable syncFavorites(String uId) {
+        return firestoreRemoteDataSource.fetchFavorites(uId)
+                .flatMapObservable(Observable::fromIterable)
+                .map(this::mapToMeal)
+                .flatMapCompletable(mealLocalDataSource::insertMeal);
+    }
+
+    private Completable syncPlan(String uId) {
+        return firestoreRemoteDataSource.fetchPlan(uId)
+                .flatMapObservable(Observable::fromIterable)
+                .map(map -> new PlanMeal((String) map.get("idMeal"), (String) map.get("strMeal"), (String) map.get("strMealThumb"), (String) map.get("day"), uId))
+                .flatMapCompletable(mealLocalDataSource::insertPlanMeal);
+    }
+
+
+    private Completable syncRecent(String uId) {
+        return firestoreRemoteDataSource.fetchCollection(uId, "recent")
+                .flatMapObservable(Observable::fromIterable)
+                .map(map -> new RecentMeal(
+                        (String) map.get("idMeal"),
+                        (String) map.get("strMeal"),
+                        (String) map.get("strMealThumb"),
+                        (long) map.get("viewedAt")
+                ))
+                .flatMapCompletable(mealLocalDataSource::insertRecentlyViewed);
+    }
+
+
+
+
+    private Meal mapToMeal(Map<String, Object> map) {
+        return new Meal(
+                (String) map.get("idMeal"), (String) map.get("strMeal"), (String) map.get("strMealThumb"),
+                (String) map.get("strCategory"), (String) map.get("strArea"), (String) map.get("strInstructions"), (String) map.get("strYoutube")
+        );
     }
 }

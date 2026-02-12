@@ -27,6 +27,7 @@ import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.GetCredentialException;
 
 import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 
@@ -70,7 +71,9 @@ public class LoginFragment extends Fragment implements LoginView{
                 AuthRepository.getInstance(
                         new AuthRemoteDataSource(requireContext()),
                         new SharedPrefsLocalDataSource(requireContext())
-                ));
+                ),
+                new MealRepository(requireContext())
+        );
 
         btnSignIn.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();

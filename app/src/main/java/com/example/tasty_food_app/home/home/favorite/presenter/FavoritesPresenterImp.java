@@ -1,6 +1,7 @@
 package com.example.tasty_food_app.home.home.favorite.presenter;
 
 import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.home.favorite.view.FavoritesView;
 
@@ -10,18 +11,19 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FavoritesPresenterImp implements FavoritesPresenter{
 
-    private FavoritesView favoritesView;
-    private MealRepository mealRepository;
-    private CompositeDisposable disposable = new CompositeDisposable();
+    private final FavoritesView favoritesView;
+    private final MealRepository mealRepository;
+    private final AuthRepository authRepository;
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
-    public FavoritesPresenterImp(FavoritesView favoritesView, MealRepository mealRepository) {
+    public FavoritesPresenterImp(FavoritesView favoritesView, MealRepository mealRepository, AuthRepository authRepository) {
         this.favoritesView = favoritesView;
         this.mealRepository = mealRepository;
+        this.authRepository = authRepository;
     }
 
     @Override
     public void getFavoriteMeals() {
-
         disposable.add(
                 mealRepository.getStoredMeals()
                         .subscribeOn(Schedulers.io())
@@ -35,9 +37,9 @@ public class FavoritesPresenterImp implements FavoritesPresenter{
 
     @Override
     public void removeMeal(Meal meal) {
-
+        String uId = authRepository.getCurrentUserId();
         disposable.add(
-                mealRepository.deleteMeal(meal)
+                mealRepository.deleteMeal(meal, uId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -49,7 +51,6 @@ public class FavoritesPresenterImp implements FavoritesPresenter{
 
     @Override
     public void clearResources() {
-
         disposable.clear();
     }
 

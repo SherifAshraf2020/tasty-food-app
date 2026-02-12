@@ -1,6 +1,7 @@
 package com.example.tasty_food_app.home.home.search.presenter;
 
 import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 import com.example.tasty_food_app.home.home.search.view.SearchView;
 
@@ -17,15 +18,16 @@ public class SearchPresenterImp implements SearchPresenter {
 
     private SearchView searchView;
     private MealRepository mealRepository;
+    private AuthRepository authRepository;
     private CompositeDisposable disposable = new CompositeDisposable();
     private PublishSubject<String> searchSubject = PublishSubject.create();
 
-    public SearchPresenterImp(SearchView searchView, MealRepository mealRepository) {
+    public SearchPresenterImp(SearchView searchView, MealRepository mealRepository, AuthRepository authRepository) {
         this.searchView = searchView;
         this.mealRepository = mealRepository;
+        this.authRepository = authRepository;
         initSearchProcessor();
     }
-
 
     @Override
     public void checkFavoritesAndShow(List<Meal> apiMeals) {
@@ -39,7 +41,7 @@ public class SearchPresenterImp implements SearchPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(favMeals -> {
                     for (Meal apiMeal : apiMeals) {
-                        apiMeal.setFavorite(false); // ريسيت
+                        apiMeal.setFavorite(false);
                         for (Meal fav : favMeals) {
                             if (apiMeal.getIdMeal().equals(fav.getIdMeal())) {
                                 apiMeal.setFavorite(true);
@@ -89,7 +91,7 @@ public class SearchPresenterImp implements SearchPresenter {
                         userId
                 );
 
-        disposable.add(mealRepository.insertPlanMeal(planMeal)
+        disposable.add(mealRepository.insertPlanMeal(planMeal, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -100,26 +102,24 @@ public class SearchPresenterImp implements SearchPresenter {
 
     @Override
     public void addToFavorite(Meal meal) {
-        disposable.add(mealRepository.insertMeal(meal)
+        String uId = authRepository.getCurrentUserId();
+        disposable.add(mealRepository.insertMeal(meal, uId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> {
-                            meal.setFavorite(true);
-                        },
+                        () -> meal.setFavorite(true),
                         throwable -> searchView.showError(throwable.getMessage())
                 ));
     }
 
     @Override
     public void removeFromFavorite(Meal meal) {
-        disposable.add(mealRepository.deleteMeal(meal)
+        String uId = authRepository.getCurrentUserId();
+        disposable.add(mealRepository.deleteMeal(meal, uId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> {
-                            meal.setFavorite(false);
-                        },
+                        () -> meal.setFavorite(false),
                         throwable -> searchView.showError(throwable.getMessage())
                 ));
     }

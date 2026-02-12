@@ -28,13 +28,13 @@ import java.util.List;
 
 public class DiscoverFragment extends Fragment implements DiscoverView, OnMealClick {
 
-    RecyclerView rvMoreMeals;
-    MealsAdapter adapter;
-    DiscoverPresenter presenter;
-    ProgressBar progressBar;
-    EditText etSearch;
-    ImageView imgRandomMeal;
-    TextView tvRandomMealName;
+    private RecyclerView rvMoreMeals;
+    private MealsAdapter adapter;
+    private DiscoverPresenter presenter;
+    private ProgressBar progressBar;
+    private EditText etSearch;
+    private ImageView imgRandomMeal;
+    private TextView tvRandomMealName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +51,6 @@ public class DiscoverFragment extends Fragment implements DiscoverView, OnMealCl
         imgRandomMeal = view.findViewById(R.id.imgRandomMeal);
         tvRandomMealName = view.findViewById(R.id.tvRandomMealName);
 
-
         adapter = new MealsAdapter(this);
         rvMoreMeals.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvMoreMeals.setAdapter(adapter);
@@ -67,7 +66,6 @@ public class DiscoverFragment extends Fragment implements DiscoverView, OnMealCl
         );
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -78,11 +76,11 @@ public class DiscoverFragment extends Fragment implements DiscoverView, OnMealCl
     public void addMealToFav(Meal meal) {
         presenter.addToFavorites(meal);
     }
+
     @Override
     public void deleteMealFromFav(Meal meal) {
         presenter.deleteMealFromFav(meal);
     }
-
 
     @Override
     public void onMealDetailsClick(Meal meal) {
@@ -90,7 +88,6 @@ public class DiscoverFragment extends Fragment implements DiscoverView, OnMealCl
         bundle.putString("mealId", meal.getIdMeal());
         Navigation.findNavController(requireView()).navigate(R.id.action_discoverFragment_to_mealDetailsFragment, bundle);
     }
-
 
     @Override
     public void showLoading() {

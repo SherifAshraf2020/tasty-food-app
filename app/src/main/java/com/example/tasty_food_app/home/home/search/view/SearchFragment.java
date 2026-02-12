@@ -21,10 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.tasty_food_app.R;
+import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.model.Meal;
 import com.example.tasty_food_app.datasource.model.area.Area;
 import com.example.tasty_food_app.datasource.model.category.Category;
 import com.example.tasty_food_app.datasource.model.ingredient.Ingredient;
+import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
+import com.example.tasty_food_app.datasource.repository.AuthRepository;
 import com.example.tasty_food_app.datasource.repository.MealRepository;
 
 import com.example.tasty_food_app.home.home.details.view.DetailsFragment;
@@ -87,8 +90,12 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
         });
 
         initViews(view);
-        MealRepository mealRepository = new MealRepository(requireContext());
-        presenter = new SearchPresenterImp(this, mealRepository);
+        AuthRepository authRepository = AuthRepository.getInstance(
+                new AuthRemoteDataSource(requireContext()),
+                new SharedPrefsLocalDataSource(requireContext())
+        );
+
+        presenter = new SearchPresenterImp(this, new MealRepository(requireContext()), authRepository);
 
         setupAdapters();
         setupListeners();
