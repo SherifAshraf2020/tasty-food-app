@@ -87,7 +87,7 @@ public class MealPlanFragment extends Fragment implements MealPlanView , OnPlanC
     @Override
     public void onMealClick(String mealId) {
         Bundle bundle = new Bundle();
-        bundle.putString("MEAL_ID", mealId);
+        bundle.putString("mealId", mealId);
         Navigation.findNavController(requireView()).navigate(R.id.action_global_detailsFragment, bundle);
     }
 
