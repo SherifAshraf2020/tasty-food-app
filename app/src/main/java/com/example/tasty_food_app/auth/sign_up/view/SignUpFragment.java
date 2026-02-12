@@ -18,12 +18,10 @@ import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
 
-import com.example.tasty_food_app.auth.sign_up.presenter.SignUpPresenter;
 import com.example.tasty_food_app.auth.sign_up.presenter.SignUpPresenterImp;
-import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.local.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
 
 
 public class SignUpFragment extends Fragment implements SignUpView{

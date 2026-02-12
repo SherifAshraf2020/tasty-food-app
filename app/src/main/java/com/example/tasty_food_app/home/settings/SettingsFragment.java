@@ -3,7 +3,6 @@ package com.example.tasty_food_app.home.settings;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -14,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
-import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.local.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.annotations.Nullable;

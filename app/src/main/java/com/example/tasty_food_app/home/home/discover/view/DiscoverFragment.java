@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tasty_food_app.R;
-import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.model.meal.Meal;
 import com.example.tasty_food_app.home.home.discover.presenter.DiscoverPresenter;
 import com.example.tasty_food_app.home.home.discover.presenter.DiscoverPresenterImp;
 

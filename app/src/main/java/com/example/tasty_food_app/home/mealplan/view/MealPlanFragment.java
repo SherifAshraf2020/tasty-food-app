@@ -14,14 +14,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
-import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
-import com.example.tasty_food_app.datasource.model.PlanMeal;
+import com.example.tasty_food_app.datasource.local.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.model.plan.PlanMeal;
 import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
-import com.example.tasty_food_app.datasource.repository.MealRepository;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.meal.MealRepository;
 import com.example.tasty_food_app.home.mealplan.presenter.MealPlanPresenter;
 import com.example.tasty_food_app.home.mealplan.presenter.MealPlanPresenterImp;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 

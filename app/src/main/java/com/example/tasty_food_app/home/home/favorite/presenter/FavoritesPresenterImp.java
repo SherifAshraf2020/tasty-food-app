@@ -1,8 +1,8 @@
 package com.example.tasty_food_app.home.home.favorite.presenter;
 
-import com.example.tasty_food_app.datasource.model.Meal;
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
-import com.example.tasty_food_app.datasource.repository.MealRepository;
+import com.example.tasty_food_app.datasource.model.meal.Meal;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.meal.MealRepository;
 import com.example.tasty_food_app.home.home.favorite.view.FavoritesView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;

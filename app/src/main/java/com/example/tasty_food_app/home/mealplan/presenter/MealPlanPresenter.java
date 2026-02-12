@@ -1,7 +1,7 @@
 package com.example.tasty_food_app.home.mealplan.presenter;
 
-import com.example.tasty_food_app.datasource.model.Meal;
-import com.example.tasty_food_app.datasource.model.PlanMeal;
+import com.example.tasty_food_app.datasource.model.meal.Meal;
+import com.example.tasty_food_app.datasource.model.plan.PlanMeal;
 
 import java.util.List;
 

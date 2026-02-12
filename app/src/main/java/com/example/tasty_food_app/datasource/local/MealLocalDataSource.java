@@ -3,9 +3,9 @@ package com.example.tasty_food_app.datasource.local;
 import android.content.Context;
 
 import com.example.tasty_food_app.datasource.db.AppDatabase;
-import com.example.tasty_food_app.datasource.model.Meal;
-import com.example.tasty_food_app.datasource.model.PlanMeal;
-import com.example.tasty_food_app.datasource.model.RecentMeal;
+import com.example.tasty_food_app.datasource.model.meal.Meal;
+import com.example.tasty_food_app.datasource.model.plan.PlanMeal;
+import com.example.tasty_food_app.datasource.model.recent.RecentMeal;
 
 import java.util.List;
 

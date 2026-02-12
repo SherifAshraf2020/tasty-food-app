@@ -11,9 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tasty_food_app.R;
-import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.local.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
 import com.example.tasty_food_app.onboarding.presenter.OnBoardingPresenterImp;
 
 import java.util.ArrayList;

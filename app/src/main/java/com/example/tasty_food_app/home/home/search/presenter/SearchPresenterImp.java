@@ -1,8 +1,9 @@
 package com.example.tasty_food_app.home.home.search.presenter;
 
-import com.example.tasty_food_app.datasource.model.Meal;
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
-import com.example.tasty_food_app.datasource.repository.MealRepository;
+import com.example.tasty_food_app.datasource.model.meal.Meal;
+import com.example.tasty_food_app.datasource.model.plan.PlanMeal;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.meal.MealRepository;
 import com.example.tasty_food_app.home.home.search.view.SearchView;
 
 import java.util.ArrayList;
@@ -82,8 +83,8 @@ public class SearchPresenterImp implements SearchPresenter {
 
     @Override
     public void addToPlan(Meal meal, String day, String userId) {
-        com.example.tasty_food_app.datasource.model.PlanMeal planMeal =
-                new com.example.tasty_food_app.datasource.model.PlanMeal(
+        PlanMeal planMeal =
+                new PlanMeal(
                         meal.getIdMeal(),
                         meal.getStrMeal(),
                         meal.getStrMealThumb(),

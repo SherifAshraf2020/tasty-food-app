@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.datasource.remote;
+package com.example.tasty_food_app.datasource.remote.firestore;
 
 import com.example.tasty_food_app.datasource.network.FirebaseClient;
 import com.google.firebase.firestore.DocumentSnapshot;

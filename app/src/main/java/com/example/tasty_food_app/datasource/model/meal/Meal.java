@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.datasource.model;
+package com.example.tasty_food_app.datasource.model.meal;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

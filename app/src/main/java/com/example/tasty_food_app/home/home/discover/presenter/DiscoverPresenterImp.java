@@ -2,11 +2,11 @@ package com.example.tasty_food_app.home.home.discover.presenter;
 
 import android.app.Application;
 
-import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
-import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.local.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.model.meal.Meal;
 import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
-import com.example.tasty_food_app.datasource.repository.MealRepository;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.meal.MealRepository;
 import com.example.tasty_food_app.home.home.discover.view.DiscoverView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;

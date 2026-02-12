@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.tasty_food_app.R;
-import com.example.tasty_food_app.datasource.model.PlanMeal;
+import com.example.tasty_food_app.datasource.model.plan.PlanMeal;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.example.tasty_food_app.datasource.remote.meal;
 
-import com.example.tasty_food_app.datasource.model.MealResponse;
+import com.example.tasty_food_app.datasource.model.meal.MealResponse;
 import com.example.tasty_food_app.datasource.model.area.AreaResponse;
 import com.example.tasty_food_app.datasource.model.category.CategoryResponse;
 import com.example.tasty_food_app.datasource.model.ingredient.IngredientResponse;

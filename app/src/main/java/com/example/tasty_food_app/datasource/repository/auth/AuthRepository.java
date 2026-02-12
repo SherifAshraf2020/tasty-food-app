@@ -1,8 +1,8 @@
-package com.example.tasty_food_app.datasource.repository;
+package com.example.tasty_food_app.datasource.repository.auth;
 
-import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
-import com.example.tasty_food_app.datasource.remote.auth.AuthNetworkResponse;
+import com.example.tasty_food_app.datasource.local.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
+import com.example.tasty_food_app.datasource.repository.meal.MealRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
 import io.reactivex.rxjava3.core.Completable;
@@ -47,13 +47,13 @@ public class AuthRepository {
 
     public Completable signUpWithEmail(String email, String password) {
         return authRemoteDataSource.signUpWithEmail(email, password)
-                .andThen(sharedPrefsLocalDataSource.saveUserSession(email))
+                .andThen(sharedPrefsLocalDataSource.saveUserSession(email , false))
                 .subscribeOn(Schedulers.io());
     }
 
     public Completable logInWithEmail(String email, String password, MealRepository mealRepository) {
         return authRemoteDataSource.logInWithEmail(email, password)
-                .andThen(sharedPrefsLocalDataSource.saveUserSession(email))
+                .andThen(sharedPrefsLocalDataSource.saveUserSession(email , false))
                 .andThen(Completable.defer(() -> {
                     String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     return mealRepository.syncAllDataFromCloud(uId);
@@ -63,11 +63,16 @@ public class AuthRepository {
 
     public Completable logInWithGoogle(String idToken, String email, MealRepository mealRepository) {
         return authRemoteDataSource.logInWithGoogle(idToken)
-                .andThen(sharedPrefsLocalDataSource.saveUserSession(email))
+                .andThen(sharedPrefsLocalDataSource.saveUserSession(email , false))
                 .andThen(Completable.defer(() -> {
                     String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     return mealRepository.syncAllDataFromCloud(uId);
                 }))
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Completable logInAsGuest() {
+        return sharedPrefsLocalDataSource.saveUserSession("Guest User", true)
                 .subscribeOn(Schedulers.io());
     }
 

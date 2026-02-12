@@ -1,8 +1,7 @@
 package com.example.tasty_food_app.auth.sign_up.presenter;
 
 import com.example.tasty_food_app.auth.sign_up.view.SignUpView;
-import com.example.tasty_food_app.datasource.remote.auth.AuthNetworkResponse;
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;

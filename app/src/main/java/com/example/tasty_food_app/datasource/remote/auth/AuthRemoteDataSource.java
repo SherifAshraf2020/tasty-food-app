@@ -2,6 +2,9 @@ package com.example.tasty_food_app.datasource.remote.auth;
 
 import android.content.Context;
 
+import com.example.tasty_food_app.datasource.remote.auth.email.EmailAuthService;
+import com.example.tasty_food_app.datasource.remote.auth.google.GoogleAuthService;
+
 import io.reactivex.rxjava3.core.Completable;
 
 public class AuthRemoteDataSource {

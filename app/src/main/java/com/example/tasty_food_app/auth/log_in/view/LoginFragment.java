@@ -26,8 +26,8 @@ import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.GetCredentialException;
 
-import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
-import com.example.tasty_food_app.datasource.repository.MealRepository;
+import com.example.tasty_food_app.datasource.local.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.repository.meal.MealRepository;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 
@@ -35,10 +35,9 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import android.util.Log;
 
 import com.example.tasty_food_app.R;
-import com.example.tasty_food_app.auth.log_in.presenter.LoginPresenter;
 import com.example.tasty_food_app.auth.log_in.presenter.LoginPresenterImp;
 import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
 import com.google.android.material.textfield.TextInputEditText;
 
 
@@ -79,6 +78,12 @@ public class LoginFragment extends Fragment implements LoginView{
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
             presenter.signIn(email, password);
+        });
+
+        Button btnGuest = view.findViewById(R.id.btnGuestMode);
+
+        btnGuest.setOnClickListener(v -> {
+            presenter.signInAsGuest();
         });
 
         setupGoogleLogin();

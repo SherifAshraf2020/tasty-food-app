@@ -2,8 +2,7 @@ package com.example.tasty_food_app.onboarding.presenter;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
 import com.example.tasty_food_app.onboarding.view.OnBoardingView;
 import com.example.tasty_food_app.onboarding.Screens.FirstScreen;
 import com.example.tasty_food_app.onboarding.Screens.SecondScreen;

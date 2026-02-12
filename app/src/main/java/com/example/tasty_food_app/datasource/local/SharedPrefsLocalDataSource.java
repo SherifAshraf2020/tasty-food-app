@@ -1,9 +1,9 @@
-package com.example.tasty_food_app.datasource;
+package com.example.tasty_food_app.datasource.local;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.model.meal.Meal;
 import com.google.gson.Gson;
 
 import io.reactivex.rxjava3.core.Completable;
@@ -16,7 +16,7 @@ public class SharedPrefsLocalDataSource {
     private static final String KEY_USER_EMAIL = "user_email";
     private static final String KEY_DAILY_MEAL_JSON = "daily_meal_json";
     private static final String KEY_DAILY_MEAL_DATE = "daily_meal_date";
-
+    private static final String KEY_IS_GUEST = "is_guest_mode";
     private final SharedPreferences sharedPreferences;
     private final Gson gson;
 
@@ -26,13 +26,18 @@ public class SharedPrefsLocalDataSource {
     }
 
 
-    public Completable saveUserSession(String email) {
+    public Completable saveUserSession(String email , boolean isGuest) {
         return Completable.fromAction(() -> {
             sharedPreferences.edit()
                     .putBoolean(KEY_IS_LOGGED_IN, true)
                     .putString(KEY_USER_EMAIL, email)
+                    .putBoolean(KEY_IS_GUEST, isGuest)
                     .apply();
         });
+    }
+
+    public boolean isGuest() {
+        return sharedPreferences.getBoolean(KEY_IS_GUEST, false);
     }
 
     public Single<Boolean> isLoggedIn() {

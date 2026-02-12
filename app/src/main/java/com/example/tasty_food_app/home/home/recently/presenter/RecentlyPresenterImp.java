@@ -1,6 +1,6 @@
 package com.example.tasty_food_app.home.home.recently.presenter;
 
-import com.example.tasty_food_app.datasource.repository.MealRepository;
+import com.example.tasty_food_app.datasource.repository.meal.MealRepository;
 import com.example.tasty_food_app.home.home.recently.view.RecentlyView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;

@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.tasty_food_app.R;
-import com.example.tasty_food_app.datasource.model.RecentMeal;
-import com.example.tasty_food_app.datasource.repository.MealRepository;
+import com.example.tasty_food_app.datasource.model.recent.RecentMeal;
+import com.example.tasty_food_app.datasource.repository.meal.MealRepository;
 import com.example.tasty_food_app.home.home.recently.presenter.RecentlyPresenter;
 import com.example.tasty_food_app.home.home.recently.presenter.RecentlyPresenterImp;
 

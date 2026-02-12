@@ -1,6 +1,6 @@
 package com.example.tasty_food_app.splash.presenter;
 
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
 import com.example.tasty_food_app.splash.view.SplashView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;

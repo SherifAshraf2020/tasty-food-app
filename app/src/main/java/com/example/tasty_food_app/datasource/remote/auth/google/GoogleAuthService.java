@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.datasource.remote.auth;
+package com.example.tasty_food_app.datasource.remote.auth.google;
 
 import android.content.Context;
 

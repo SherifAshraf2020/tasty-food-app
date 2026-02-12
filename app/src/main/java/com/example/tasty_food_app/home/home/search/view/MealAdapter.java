@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.tasty_food_app.R;
-import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.model.meal.Meal;
 import java.util.ArrayList;
 import java.util.List;
 

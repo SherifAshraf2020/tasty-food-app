@@ -1,8 +1,7 @@
 package com.example.tasty_food_app.auth.forget_pass.presenter;
 
 import com.example.tasty_food_app.auth.forget_pass.view.ForgetPasswordView;
-import com.example.tasty_food_app.datasource.remote.auth.AuthNetworkResponse;
-import com.example.tasty_food_app.datasource.repository.AuthRepository;
+import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;

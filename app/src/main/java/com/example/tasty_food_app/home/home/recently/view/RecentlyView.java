@@ -1,6 +1,6 @@
 package com.example.tasty_food_app.home.home.recently.view;
 
-import com.example.tasty_food_app.datasource.model.RecentMeal;
+import com.example.tasty_food_app.datasource.model.recent.RecentMeal;
 
 import java.util.List;
 

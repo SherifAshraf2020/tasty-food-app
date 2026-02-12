@@ -1,19 +1,18 @@
-package com.example.tasty_food_app.datasource.repository;
+package com.example.tasty_food_app.datasource.repository.meal;
 
-import android.app.Application;
 import android.content.Context;
 
-import com.example.tasty_food_app.datasource.SharedPrefsLocalDataSource;
+import com.example.tasty_food_app.datasource.local.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.local.MealLocalDataSource;
-import com.example.tasty_food_app.datasource.model.Meal;
-import com.example.tasty_food_app.datasource.model.MealResponse;
-import com.example.tasty_food_app.datasource.model.PlanMeal;
-import com.example.tasty_food_app.datasource.model.RecentMeal;
+import com.example.tasty_food_app.datasource.model.meal.Meal;
+import com.example.tasty_food_app.datasource.model.meal.MealResponse;
+import com.example.tasty_food_app.datasource.model.plan.PlanMeal;
+import com.example.tasty_food_app.datasource.model.recent.RecentMeal;
 import com.example.tasty_food_app.datasource.model.area.AreaResponse;
 import com.example.tasty_food_app.datasource.model.category.CategoryResponse;
 import com.example.tasty_food_app.datasource.model.ingredient.IngredientResponse;
-import com.example.tasty_food_app.datasource.remote.FirestoreRemoteDataSource;
-import com.example.tasty_food_app.datasource.remote.FirestoreService;
+import com.example.tasty_food_app.datasource.remote.firestore.FirestoreRemoteDataSource;
+import com.example.tasty_food_app.datasource.remote.firestore.FirestoreService;
 import com.example.tasty_food_app.datasource.remote.meal.MealRemoteDataSource;
 
 import java.util.List;

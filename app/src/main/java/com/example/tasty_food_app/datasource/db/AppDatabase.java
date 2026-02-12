@@ -8,9 +8,9 @@ import androidx.room.RoomDatabase;
 
 import com.example.tasty_food_app.datasource.local.MealDao;
 import com.example.tasty_food_app.datasource.local.PlanDao;
-import com.example.tasty_food_app.datasource.model.Meal;
-import com.example.tasty_food_app.datasource.model.PlanMeal;
-import com.example.tasty_food_app.datasource.model.RecentMeal;
+import com.example.tasty_food_app.datasource.model.meal.Meal;
+import com.example.tasty_food_app.datasource.model.plan.PlanMeal;
+import com.example.tasty_food_app.datasource.model.recent.RecentMeal;
 
 @Database(entities = {Meal.class, RecentMeal.class, PlanMeal.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {

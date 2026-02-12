@@ -1,6 +1,6 @@
 package com.example.tasty_food_app.home.home.search.view;
 
-import com.example.tasty_food_app.datasource.model.Meal;
+import com.example.tasty_food_app.datasource.model.meal.Meal;
 import com.example.tasty_food_app.datasource.model.area.Area;
 import com.example.tasty_food_app.datasource.model.category.Category;
 import com.example.tasty_food_app.datasource.model.ingredient.Ingredient;
