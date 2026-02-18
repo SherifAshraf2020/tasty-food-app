@@ -33,15 +33,19 @@ public class MealPlanPresenterImp implements MealPlanPresenter {
 
     @Override
     public void getWeeklyPlan(String userId) {
-        disposable.add(
-                repository.getAllPlannedMeals(userId)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                planMeals -> view.showPlanData(planMeals),
-                                throwable -> view.onError(throwable.getMessage())
-                        )
-        );
+        if (authRepository.isGuest()) {
+            view.showGuestView();
+        } else {
+            disposable.add(
+                    repository.getAllPlannedMeals(userId)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    planMeals -> view.showPlanData(planMeals),
+                                    throwable -> view.onError(throwable.getMessage())
+                            )
+            );
+        }
     }
 
     @Override

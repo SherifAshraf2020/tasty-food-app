@@ -58,6 +58,7 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
     private SuggestionAdapter suggestionAdapter;
 
     private SearchPresenter presenter;
+    private AuthRepository authRepository;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,7 +91,7 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
         });
 
         initViews(view);
-        AuthRepository authRepository = AuthRepository.getInstance(
+        authRepository = AuthRepository.getInstance(
                 new AuthRemoteDataSource(requireContext()),
                 new SharedPrefsLocalDataSource(requireContext())
         );
@@ -336,6 +337,11 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
 
     @Override
     public void onMealClick(Meal meal) {
+        if (selectedDay != null && authRepository.isGuest()) {
+            showLoginDialog();
+            return;
+        }
+
         if (selectedDay != null && !selectedDay.isEmpty() && !selectedDay.equalsIgnoreCase("none")) {
 
             presenter.addToPlan(meal, selectedDay, userId);
@@ -352,6 +358,11 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
     @Override
     public void onFavoriteClick(Meal meal) {
         if (meal == null) return;
+
+        if (authRepository.isGuest()) {
+            showLoginDialog();
+            return;
+        }
 
         boolean wasFavorite = meal.isFavorite();
         meal.setFavorite(!wasFavorite);
@@ -370,5 +381,19 @@ public class SearchFragment extends Fragment implements SearchView , OnSearchCli
             presenter.addToFavorite(meal);
             Toast.makeText(getContext(), "Added to Favorite ❤️", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+
+    private void showLoginDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Join Tasty Food! 🍔")
+                .setMessage("Login now to save your favorite meals and organize your weekly plan.")
+                .setPositiveButton("Login", (dialog, which) -> {
+                    androidx.navigation.Navigation.findNavController(requireView())
+                            .navigate(R.id.action_global_to_auth_graph);
+                })
+                .setNegativeButton("Later", null)
+                .show();
     }
 }

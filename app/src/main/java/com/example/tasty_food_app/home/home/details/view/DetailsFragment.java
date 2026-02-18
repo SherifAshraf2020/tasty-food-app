@@ -78,11 +78,15 @@ public class DetailsFragment extends Fragment implements DetailsView {
         }
 
         btnFavorite.setOnClickListener(v -> {
-            if (currentMeal != null) {
-                if (isFavorite) {
-                    presenter.deleteMealFromFav(currentMeal);
-                } else {
-                    presenter.addToFavorites(currentMeal);
+            if (presenter.isGuest()) {
+                showLoginDialog();
+            } else {
+                if (currentMeal != null) {
+                    if (isFavorite) {
+                        presenter.deleteMealFromFav(currentMeal);
+                    } else {
+                        presenter.addToFavorites(currentMeal);
+                    }
                 }
             }
         });
@@ -106,7 +110,6 @@ public class DetailsFragment extends Fragment implements DetailsView {
         rvIngredients.setAdapter(ingredientsAdapter);
     }
 
-    // --- تنفيذ الميثودز (Implementation) ---
 
     @Override
     public void showLoading() {
@@ -127,10 +130,8 @@ public class DetailsFragment extends Fragment implements DetailsView {
 
         Glide.with(requireContext()).load(meal.getStrMealThumb()).into(imgMeal);
 
-        // عرض المكونات في الـ Adapter الأفقي
         ingredientsAdapter.setList(meal.getIngredientsList());
 
-        // تشغيل اليوتيوب
         if (meal.getStrYoutube() != null && !meal.getStrYoutube().isEmpty()) {
             setupYoutube(meal.getStrYoutube());
         }
@@ -140,7 +141,6 @@ public class DetailsFragment extends Fragment implements DetailsView {
         String videoId = "";
         if (url.contains("v=")) {
             videoId = url.split("v=")[1];
-            // لو اللينك فيه باراميترز تانية بعد الـ ID
             int ampersandIndex = videoId.indexOf("&");
             if (ampersandIndex != -1) {
                 videoId = videoId.substring(0, ampersandIndex);
@@ -161,9 +161,9 @@ public class DetailsFragment extends Fragment implements DetailsView {
     public void updateFavoriteIcon(boolean isFavorite) {
         this.isFavorite = isFavorite;
         if (isFavorite) {
-            btnFavorite.setImageResource(R.drawable.ic_favorite); // القلب المليان
+            btnFavorite.setImageResource(R.drawable.ic_favorite);
         } else {
-            btnFavorite.setImageResource(R.drawable.ic_favorite_border); // القلب الفاضي
+            btnFavorite.setImageResource(R.drawable.ic_favorite_border);
         }
     }
 
@@ -189,5 +189,19 @@ public class DetailsFragment extends Fragment implements DetailsView {
         super.onDestroy();
         if (youtubePlayer != null) youtubePlayer.release();
         if (presenter != null) presenter.clearResources();
+    }
+
+
+
+    private void showLoginDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Login Required")
+                .setMessage("You need to login to add meals to your favorites. Do you want to login now?")
+                .setPositiveButton("Login", (dialog, which) -> {
+                    androidx.navigation.Navigation.findNavController(requireView())
+                            .navigate(R.id.action_global_to_auth_graph);
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 }

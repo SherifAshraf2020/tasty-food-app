@@ -32,6 +32,8 @@ public class FavoritesFragment extends Fragment implements FavoritesView, OnFavo
     private RecyclerView rvFavorites;
     private FavoritesAdapter favoritesAdapter;
     private FavoritesPresenter presenter;
+    private androidx.constraintlayout.widget.ConstraintLayout guestLayout;
+    private android.widget.Button btnLogin;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class FavoritesFragment extends Fragment implements FavoritesView, OnFavo
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvFavorites = view.findViewById(R.id.rv_favorites);
+        guestLayout = view.findViewById(R.id.layout_guest_fav);
+        btnLogin = view.findViewById(R.id.btn_fav_login);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         rvFavorites.setLayoutManager(gridLayoutManager);
@@ -77,6 +81,16 @@ public class FavoritesFragment extends Fragment implements FavoritesView, OnFavo
     @Override
     public void showError(String error) {
         Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showGuestView() {
+        rvFavorites.setVisibility(View.GONE);
+        guestLayout.setVisibility(View.VISIBLE);
+
+        btnLogin.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_global_to_auth_graph);
+        });
     }
 
     @Override

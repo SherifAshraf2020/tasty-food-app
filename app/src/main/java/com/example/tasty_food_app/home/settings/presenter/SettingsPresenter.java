@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.home.settings;
+package com.example.tasty_food_app.home.settings.presenter;
 
 public interface SettingsPresenter {
     void logout();

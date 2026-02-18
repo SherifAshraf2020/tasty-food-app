@@ -74,13 +74,22 @@ public class DiscoverFragment extends Fragment implements DiscoverView, OnMealCl
 
     @Override
     public void addMealToFav(Meal meal) {
-        presenter.addToFavorites(meal);
+        if (presenter.isUserGuest()) {
+            showLoginDialog();
+            adapter.notifyDataSetChanged();
+        } else {
+            presenter.addToFavorites(meal);
+        }
     }
 
     @Override
     public void deleteMealFromFav(Meal meal) {
-        presenter.deleteMealFromFav(meal);
-    }
+        if (presenter.isUserGuest()) {
+            showLoginDialog();
+            adapter.notifyDataSetChanged();
+        } else {
+            presenter.deleteMealFromFav(meal);
+        }    }
 
     @Override
     public void onMealDetailsClick(Meal meal) {
@@ -129,5 +138,18 @@ public class DiscoverFragment extends Fragment implements DiscoverView, OnMealCl
         if (presenter != null) {
             presenter.clearResources();
         }
+    }
+
+
+
+    private void showLoginDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Login Required")
+                .setMessage("You need to login to add recipes to your favorites. Would you like to login now?")
+                .setPositiveButton("Login", (dialog, which) -> {
+                    Navigation.findNavController(requireView()).navigate(R.id.action_global_to_auth_graph);
+                })
+                .setNegativeButton("Maybe Later", null)
+                .show();
     }
 }

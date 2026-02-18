@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_meal_plan" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.tasty_food_app.home.settings.SettingsFragment"
+        android:name="com.example.tasty_food_app.home.settings.view.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

@@ -30,6 +30,8 @@ import io.reactivex.rxjava3.annotations.Nullable;
 
 public class MealPlanFragment extends Fragment implements MealPlanView , OnPlanClick {
 
+    private androidx.constraintlayout.widget.ConstraintLayout guestLayout;
+    private Button btnLogin;
 
     private RecyclerView recyclerView;
     private PlanAdapter adapter;
@@ -37,6 +39,7 @@ public class MealPlanFragment extends Fragment implements MealPlanView , OnPlanC
     private Button btnGenerateRandom;
     private List<String> currentDays;
     private String userId;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,6 +64,10 @@ public class MealPlanFragment extends Fragment implements MealPlanView , OnPlanC
         recyclerView = view.findViewById(R.id.rvWeeklyPlan);
         btnGenerateRandom = view.findViewById(R.id.btnGenerateRandomPlan);
 
+        guestLayout = view.findViewById(R.id.layout_guest_plan);
+        btnLogin = view.findViewById(R.id.btn_plan_login);
+
+
         adapter = new PlanAdapter(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -75,9 +82,9 @@ public class MealPlanFragment extends Fragment implements MealPlanView , OnPlanC
     @Override
     public void onResume() {
         super.onResume();
-        if (userId != null) {
+
             presenter.getWeeklyPlan(userId);
-        }
+
     }
 
     @Override
@@ -138,6 +145,17 @@ public class MealPlanFragment extends Fragment implements MealPlanView , OnPlanC
     @Override
     public void onError(String message) {
         Toast.makeText(getContext(), "Error: " + message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showGuestView() {
+        recyclerView.setVisibility(View.GONE);
+        btnGenerateRandom.setVisibility(View.GONE);
+        guestLayout.setVisibility(View.VISIBLE);
+
+        btnLogin.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_global_to_auth_graph);
+        });
     }
 
     @Override

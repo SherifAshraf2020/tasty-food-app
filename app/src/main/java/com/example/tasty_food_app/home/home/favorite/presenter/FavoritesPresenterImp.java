@@ -24,15 +24,19 @@ public class FavoritesPresenterImp implements FavoritesPresenter{
 
     @Override
     public void getFavoriteMeals() {
-        disposable.add(
-                mealRepository.getStoredMeals()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                meals -> favoritesView.showFavoriteMeals(meals),
-                                throwable -> favoritesView.showError(throwable.getMessage())
-                        )
-        );
+        if (authRepository.isGuest()) {
+            favoritesView.showGuestView();
+        } else {
+            disposable.add(
+                    mealRepository.getStoredMeals()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    meals -> favoritesView.showFavoriteMeals(meals),
+                                    throwable -> favoritesView.showError(throwable.getMessage())
+                            )
+            );
+        }
     }
 
     @Override

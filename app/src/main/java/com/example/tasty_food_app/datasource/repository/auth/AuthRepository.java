@@ -76,6 +76,12 @@ public class AuthRepository {
                 .subscribeOn(Schedulers.io());
     }
 
+
+    public boolean isGuest() {
+        return sharedPrefsLocalDataSource.isGuest();
+    }
+
+
     public Completable resetPassword(String email) {
         return authRemoteDataSource.resetPassword(email)
                 .subscribeOn(Schedulers.io());

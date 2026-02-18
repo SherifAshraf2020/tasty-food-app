@@ -8,4 +8,6 @@ public interface DiscoverPresenter {
     void addToFavorites(Meal meal);
     void clearResources();
     void deleteMealFromFav(Meal meal);
+
+    boolean isUserGuest();
 }

@@ -37,6 +37,14 @@ public class SearchPresenterImp implements SearchPresenter {
             return;
         }
 
+        if (authRepository.isGuest()) {
+            for (Meal apiMeal : apiMeals) {
+                apiMeal.setFavorite(false);
+            }
+            searchView.showMealsResult(apiMeals);
+            return;
+        }
+
         disposable.add(mealRepository.getStoredMeals()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

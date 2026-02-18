@@ -72,28 +72,17 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealsViewHol
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(imgMeal);
 
-
             if (meal.isFavorite()) {
                 imgFavorite.setImageResource(R.drawable.ic_favorite);
-                imgFavorite.setTag("filled");
             } else {
                 imgFavorite.setImageResource(R.drawable.ic_favorite_border);
-                imgFavorite.setTag("border");
             }
 
             imgFavorite.setOnClickListener(v -> {
-                String currentTag = (String) imgFavorite.getTag();
-
-                if (currentTag.equals("border")) {
-                    imgFavorite.setImageResource(R.drawable.ic_favorite);
-                    imgFavorite.setTag("filled");
-                    meal.setFavorite(true);
-                    onMealClick.addMealToFav(meal);
-                } else {
-                    imgFavorite.setImageResource(R.drawable.ic_favorite_border);
-                    imgFavorite.setTag("border");
-                    meal.setFavorite(false);
+                if (meal.isFavorite()) {
                     onMealClick.deleteMealFromFav(meal);
+                } else {
+                    onMealClick.addMealToFav(meal);
                 }
             });
 

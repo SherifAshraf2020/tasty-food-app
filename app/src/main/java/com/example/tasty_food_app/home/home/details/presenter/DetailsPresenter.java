@@ -11,4 +11,7 @@ public interface DetailsPresenter {
 
 
     void addMealToRecentlyViewed(Meal meal);
+
+
+    boolean isGuest();
 }

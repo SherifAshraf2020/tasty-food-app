@@ -10,5 +10,5 @@ public interface FavoritesView {
 
     void showError(String error);
 
-
+    void showGuestView();
 }

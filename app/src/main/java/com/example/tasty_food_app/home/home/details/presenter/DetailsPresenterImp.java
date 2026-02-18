@@ -72,6 +72,10 @@ public class DetailsPresenterImp implements DetailsPresenter{
 
     @Override
     public void addMealToRecentlyViewed(Meal meal) {
+        if (authRepository.isGuest()) {
+            return;
+        }
+
         String uId = authRepository.getCurrentUserId();
         disposables.add(
                 mealRepository.insertRecentlyViewed(meal, uId)
@@ -101,5 +105,11 @@ public class DetailsPresenterImp implements DetailsPresenter{
     public void clearResources() {
         disposables.clear();
         detailsView = null;
+    }
+
+
+    @Override
+    public boolean isGuest() {
+        return authRepository.isGuest();
     }
 }

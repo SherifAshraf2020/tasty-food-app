@@ -10,6 +10,7 @@ import com.example.tasty_food_app.datasource.repository.meal.MealRepository;
 import com.example.tasty_food_app.home.home.discover.view.DiscoverView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -54,14 +55,19 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
                 mealRepository.getMealsByLetter(letter)
                         .subscribeOn(Schedulers.io())
                         .flattenAsObservable(response -> response.getMeals())
-                        .flatMap(meal ->
-                                mealRepository.isFavorite(meal.getIdMeal())
+                        .flatMap(meal -> {
+                            if (authRepository.isGuest()) {
+                                meal.setFavorite(false);
+                                return Observable.just(meal);
+                            } else {
+                                return mealRepository.isFavorite(meal.getIdMeal())
                                         .toObservable()
                                         .map(isFav -> {
                                             meal.setFavorite(isFav);
                                             return meal;
-                                        })
-                        )
+                                        });
+                            }
+                        })
                         .toList()
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -75,6 +81,9 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
 
     @Override
     public void addToFavorites(Meal meal) {
+        if (authRepository.isGuest()) {
+            return;
+        }
         String uId = authRepository.getCurrentUserId();
         disposable.add(
                 mealRepository.insertMeal(meal, uId)
@@ -89,6 +98,9 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
 
     @Override
     public void deleteMealFromFav(Meal meal) {
+        if (authRepository.isGuest()) {
+            return;
+        }
         String uId = authRepository.getCurrentUserId();
         disposable.add(
                 mealRepository.deleteMeal(meal, uId)
@@ -99,6 +111,11 @@ public class DiscoverPresenterImp implements DiscoverPresenter{
                                 throwable -> discoverView.showError("Failed to delete: " + throwable.getMessage())
                         )
         );
+    }
+
+    @Override
+    public boolean isUserGuest() {
+        return authRepository.isGuest();
     }
 
     @Override

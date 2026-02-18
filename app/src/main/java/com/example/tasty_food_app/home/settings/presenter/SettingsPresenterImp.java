@@ -1,6 +1,7 @@
-package com.example.tasty_food_app.home.settings;
+package com.example.tasty_food_app.home.settings.presenter;
 
 import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
+import com.example.tasty_food_app.home.settings.view.SettingsView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;

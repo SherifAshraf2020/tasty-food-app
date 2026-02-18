@@ -1,4 +1,4 @@
-package com.example.tasty_food_app.home.settings;
+package com.example.tasty_food_app.home.settings.view;
 
 import android.os.Bundle;
 
@@ -16,6 +16,8 @@ import com.example.tasty_food_app.R;
 import com.example.tasty_food_app.datasource.local.SharedPrefsLocalDataSource;
 import com.example.tasty_food_app.datasource.remote.auth.AuthRemoteDataSource;
 import com.example.tasty_food_app.datasource.repository.auth.AuthRepository;
+import com.example.tasty_food_app.home.settings.presenter.SettingsPresenter;
+import com.example.tasty_food_app.home.settings.presenter.SettingsPresenterImp;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.annotations.Nullable;

@@ -8,4 +8,6 @@ public interface RecentlyView {
     void showRecentMeals(List<RecentMeal> recentMeals);
     void showEmptyMessage();
     void showError(String message);
+
+    void showGuestView();
 }

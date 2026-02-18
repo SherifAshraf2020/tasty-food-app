@@ -17,4 +17,8 @@ public interface MealPlanView {
     void onDeleteSuccess();
 
     void onError(String message);
+
+
+
+    void showGuestView();
 }
